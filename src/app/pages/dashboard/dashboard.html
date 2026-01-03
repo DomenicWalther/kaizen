@@ -1,1 +1,36 @@
-<p>dashboard works!</p>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+  <h2 class="text-4xl font-bold">Character Stats</h2>
+  <h3 class="mt-5 text-lg font-medium">Level: {{ character().level }}</h3>
+  <div class="mt-2">
+    <p>Strength: {{ character().baseStrength }}</p>
+    <p>Intelligence: {{ character().baseIntelligence }}</p>
+    <p>Endurance: {{ character().baseEndurance }}</p>
+    <p>Gold: {{ character().gold }}</p>
+  </div>
+</section>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-4">
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('level', 1)">
+    Increase Level
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('level', -1)">
+    Decrease Level
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('baseStrength', 1)">
+    Increase Strength
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('baseStrength', -1)">
+    Decrease Strength
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('baseIntelligence', 1)">
+    Increase Intelligence
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('baseIntelligence', -1)">
+    Decrease Intelligence
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('baseEndurance', 1)">
+    Increase Endurance
+  </button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="modifyStat('baseEndurance', -1)">
+    Decrease Endurance
+  </button>
+</section>

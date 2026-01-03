@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CharacterService } from '../../services/character';
 import { Character } from '../../models/character.model';
 
 @Component({
@@ -8,28 +9,10 @@ import { Character } from '../../models/character.model';
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  character = signal<Character>({
-    id: '1',
-    name: 'Hero',
-    level: 10,
-    baseStrength: 15,
-    baseIntelligence: 12,
-    baseEndurance: 14,
-    strengthModifier: 2,
-    intelligenceModifier: 3,
-    enduranceModifier: 1,
-    prestigeLevel: 0,
-    prestigeMultipliers: {
-      strength: 1,
-      intelligence: 1,
-      endurance: 1,
-    },
-    gold: 1000,
-    currentStage: 1,
-    currentWave: 1,
-    createdAt: new Date(),
-    lastActiveAt: new Date(),
-  });
+  characterService = inject(CharacterService);
+  get character() {
+    return this.characterService.character;
+  }
 
   modifyStat(
     stat: keyof Pick<
@@ -38,10 +21,6 @@ export class Dashboard {
     >,
     amount: number
   ) {
-    const currentValue = this.character()[stat];
-    const newValue = currentValue + amount;
-    if (newValue >= 0) {
-      this.character.update((char) => ({ ...char, [stat]: newValue }));
-    }
+    this.characterService.modifyStat(stat, amount);
   }
 }

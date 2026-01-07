@@ -58,14 +58,14 @@ export class Campaign {
   }
 
   toggleFight() {
-    if (!this.isFighting()) {
+    if (this.isFighting()) {
+      clearInterval(this.fightIntervalID);
+      this.isFighting.set(false);
+    } else {
       this.fightIntervalID = setInterval(() => {
         this.performAttack();
       }, this.attackSpeed());
       this.isFighting.set(true);
-    } else {
-      clearInterval(this.fightIntervalID);
-      this.isFighting.set(false);
     }
   }
 

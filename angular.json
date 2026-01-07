@@ -5,7 +5,13 @@
   "projects": {
     "kaizen": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "skipTests": true,
+          "inlineStyle": true,
+          "standalone": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -15,7 +21,7 @@
           "options": {
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [

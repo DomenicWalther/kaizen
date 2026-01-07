@@ -1,11 +1,16 @@
 <div class="flex items-center flex-col">
-  <p class="text-xl font-bold">Level 1</p>
-  <p>Reward: <span class="font-bold"> +5 Strength</span></p>
+  <p class="text-xl font-bold">Level {{ milestone().level }}</p>
+  <p>
+    Reward: <span class="font-bold"> +{{ milestone().reward }} {{ milestone().type }} </span>
+  </p>
   <div class="flex flex-col items-center mt-3">
     <p>Requirement:</p>
-    <p>Walk 8000 steps a day for 1 week</p>
+    <p>{{ milestone().requirement }}</p>
   </div>
-  <button class="bg-blue-300 text-blue-950 font-bold text-xl py-4 px-8 rounded-lg mt-5">
+  <button
+    class="bg-blue-300 text-blue-950 font-bold text-xl py-4 px-8 rounded-lg mt-5"
+    (click)="onUnlockClick()"
+  >
     Unlock Level
   </button>
 </div>

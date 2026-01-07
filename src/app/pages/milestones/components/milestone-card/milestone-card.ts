@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Milestone } from '../../../../models/milestone.model';
 
 @Component({
@@ -8,14 +8,11 @@ import { Milestone } from '../../../../models/milestone.model';
   styleUrl: './milestone-card.css',
 })
 export class MilestoneCard {
-  strengthMilestones: Milestone[] = [
-    {
-      id: 'str-1',
-      type: 'Strength',
-      requirement: 'Walk 8000 Steps for 7 Days in a Row',
-      reward: 5,
-      achieved: false,
-      level: 1,
-    },
-  ];
+  milestone = input.required<Milestone>();
+
+  unlockMilestone = output<Milestone>();
+
+  onUnlockClick() {
+    this.unlockMilestone.emit(this.milestone());
+  }
 }

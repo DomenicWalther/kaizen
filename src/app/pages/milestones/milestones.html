@@ -4,5 +4,8 @@
 <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col">
   <h2 class="text-2xl font-bold">Strength Milestones</h2>
   <p>Current Total Bonuses from Milestones: +10 Strength</p>
-  <app-milestone-card></app-milestone-card>
+  <app-milestone-card
+    [milestone]="currentMileStone"
+    (unlockMilestone)="handleUnlock($event)"
+  ></app-milestone-card>
 </section>

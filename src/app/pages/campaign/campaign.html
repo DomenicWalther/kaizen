@@ -1,1 +1,16 @@
-<p>campaign works!</p>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+  <h2 class="text-4xl font-bold">Campaign</h2>
+  <div class="mt-5">
+    <ul>
+      <li>Current Stage: {{ character().currentStage }}</li>
+      <li>Current Wave: {{ character().currentWave }}</li>
+    </ul>
+  </div>
+</section>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-4">
+  <div>
+    <img ngSrc="/sprites/sceleton.png" alt="Enemy Sprite" width="256" height="294" />
+    <p>Enemy HP: {{ enemyHP() }}</p>
+  </div>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="beginFight()">Begin Fight</button>
+</section>

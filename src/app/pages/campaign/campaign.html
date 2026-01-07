@@ -11,6 +11,7 @@
   <div>
     <p>Your Damage: {{ attackDamage() }}</p>
     <p>Damage per Second: {{ damagePerSecond() }}</p>
+    <p>Your Attack Speed: {{ 1000 / attackSpeed() }}/s</p>
     <p>Strength: {{ character().baseStrength }}</p>
     <p>
       Multipliers: {{ character().strengthModifier }} x
@@ -21,5 +22,22 @@
     <img ngSrc="/sprites/necromancer.png" alt="Enemy Sprite" width="256" height="294" />
     <p>Enemy HP: {{ enemyHP() }}</p>
   </div>
-  <button class="p-5 bg-blue-950 text-white font-bold" (click)="beginFight()">Begin Fight</button>
+  @if (isFighting()) {
+  <button class="p-5 bg-gray-500 text-white font-bold" (click)="toggleFight()">Stop Fight</button>
+  } @else {
+
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="toggleFight()">Begin Fight</button>
+  }
+</section>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-5">
+  <button class="px-5 py-10 bg-blue-950 text-white font-bold" (click)="increaseAttackSpeed()">
+    Increase Attack Speed
+  </button>
+  <button
+    class="px-5 py-10 bg-blue-950 text-white font-bold"
+    (click)="modifyStat('baseStrength', 1)"
+  >
+    Increase Strength
+  </button>
+  <button class="px-5 py-10 bg-blue-950 text-white font-bold">Increase Prestige Multiplier</button>
 </section>

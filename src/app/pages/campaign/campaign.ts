@@ -38,7 +38,7 @@ export class Campaign {
     this.enemyHP.set(this.calculateEnemyHP());
     this.characterService.modifyStat('gold', 50);
     if (this.character().currentWave == 10) {
-      this.character().currentStage = 100;
+      this.character().currentStage += 1;
     }
     this.character().currentWave += this.character().currentWave < 10 ? 1 : -9;
   }

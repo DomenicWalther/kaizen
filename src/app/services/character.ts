@@ -18,7 +18,7 @@ export class CharacterService {
     if (saved) {
       return JSON.parse(saved);
     }
-    // Just returns a default character for now
+    // Returns a default character if none is saved
     return {
       id: '1',
       name: 'Hero',

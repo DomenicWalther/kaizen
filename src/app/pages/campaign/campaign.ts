@@ -14,15 +14,17 @@ export class Campaign {
     return this.characterService.character;
   }
 
-  attackSpeed = 1000;
-
+  attackSpeed = signal(1000);
+  attackDamage = signal(
+    this.character().baseStrength *
+      this.character().strengthModifier *
+      this.character().prestigeMultipliers.strength
+  );
+  damagePerSecond = signal(this.attackDamage() / (this.attackSpeed() / 1000));
   enemyHP = signal(100);
 
   performAttack() {
-    let attackAmount =
-      this.character().baseStrength *
-      this.character().strengthModifier *
-      this.character().prestigeMultipliers.strength;
+    let attackAmount = this.attackDamage();
     this.enemyHP.update((hp) => Math.max(0, hp - attackAmount));
     if (this.enemyHP() === 0) {
       this.enemyHP.set(100);
@@ -34,6 +36,6 @@ export class Campaign {
   beginFight() {
     setInterval(() => {
       this.performAttack();
-    }, this.attackSpeed);
+    }, this.attackSpeed());
   }
 }

@@ -9,7 +9,16 @@
 </section>
 <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-4">
   <div>
-    <img ngSrc="/sprites/sceleton.png" alt="Enemy Sprite" width="256" height="294" />
+    <p>Your Damage: {{ attackDamage() }}</p>
+    <p>Damage per Second: {{ damagePerSecond() }}</p>
+    <p>Strength: {{ character().baseStrength }}</p>
+    <p>
+      Multipliers: {{ character().strengthModifier }} x
+      {{ character().prestigeMultipliers.strength }}
+    </p>
+  </div>
+  <div>
+    <img ngSrc="/sprites/necromancer.png" alt="Enemy Sprite" width="256" height="294" />
     <p>Enemy HP: {{ enemyHP() }}</p>
   </div>
   <button class="p-5 bg-blue-950 text-white font-bold" (click)="beginFight()">Begin Fight</button>

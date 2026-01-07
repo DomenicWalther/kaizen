@@ -6,7 +6,6 @@ import { Milestone } from '../../models/milestone.model';
   selector: 'app-milestones',
   imports: [MilestoneCard],
   templateUrl: './milestones.html',
-  styleUrl: './milestones.css',
 })
 export class Milestones {
   currentLevel = 1;

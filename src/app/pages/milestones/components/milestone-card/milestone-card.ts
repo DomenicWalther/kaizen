@@ -5,7 +5,6 @@ import { Milestone } from '../../../../models/milestone.model';
   selector: 'app-milestone-card',
   imports: [],
   templateUrl: './milestone-card.html',
-  styleUrl: './milestone-card.css',
 })
 export class MilestoneCard {
   milestone = input.required<Milestone>();

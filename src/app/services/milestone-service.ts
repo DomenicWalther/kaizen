@@ -1,10 +1,11 @@
 import { effect, Injectable, signal } from '@angular/core';
+import { Milestone } from '../models/milestone.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Milestones {
-  milestones = signal<Milestones[]>(this.loadMilestones());
+export class MilestoneService {
+  milestones = signal<Milestone[]>(this.loadMilestones());
 
   constructor() {
     effect(() => {
@@ -12,7 +13,7 @@ export class Milestones {
     });
   }
 
-  private loadMilestones(): Milestones[] {
+  private loadMilestones(): Milestone[] {
     const saved = localStorage.getItem('milestones');
     if (saved) {
       return JSON.parse(saved);

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CharacterService } from '../../services/character';
+import { CharacterService } from '../../services/character-service';
 import { Character } from '../../models/character.model';
 
 @Component({

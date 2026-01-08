@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CharacterService } from '../../services/character';
+import { CharacterService } from '../../services/character-service';
 import { NgOptimizedImage } from '@angular/common';
 import { Character } from '../../models/character.model';
-import { CombatService } from '../../services/combat';
+import { CombatService } from '../../services/combat-service';
 
 @Component({
   selector: 'app-campaign',

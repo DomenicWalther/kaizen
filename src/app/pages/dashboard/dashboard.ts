@@ -22,4 +22,8 @@ export class Dashboard {
   ) {
     this.characterService.modifyStat(stat, amount);
   }
+
+  resetCharacter() {
+    this.characterService.resetCharacter();
+  }
 }

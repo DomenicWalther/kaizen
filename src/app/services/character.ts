@@ -18,7 +18,10 @@ export class CharacterService {
     if (saved) {
       return JSON.parse(saved);
     }
-    // Returns a default character if none is saved
+    return this.returnDefaultCharacter();
+  }
+
+  private returnDefaultCharacter(): Character {
     return {
       id: '1',
       name: 'Hero',
@@ -41,6 +44,10 @@ export class CharacterService {
       createdAt: new Date(),
       lastActiveAt: new Date(),
     };
+  }
+
+  resetCharacter() {
+    this.character.set(this.returnDefaultCharacter());
   }
 
   advanceWave() {

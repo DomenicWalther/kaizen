@@ -21,6 +21,11 @@
   <div>
     <img ngSrc="/sprites/necromancer.png" alt="Enemy Sprite" width="256" height="294" />
     <p>Enemy HP: {{ enemyHP() }}</p>
+    <progress
+      [value]="enemyHP()"
+      [max]="combatService.calculateEnemyHP()"
+      class="[&::-webkit-progress-bar]:bg-green-600 [&::-moz-progress-bar]:bg-green-600 bg-red-900"
+    ></progress>
   </div>
   @if (isFighting()) {
   <button class="p-5 bg-gray-500 text-white font-bold" (click)="toggleFight()">Stop Fight</button>

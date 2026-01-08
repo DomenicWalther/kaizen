@@ -26,9 +26,9 @@ export class Campaign {
   damagePerSecond = computed(() => this.attackDamage() * (1000 / this.attackSpeed()));
 
   handleEnemyDefeat() {
-    this.enemyHP.set(this.combatService.calculateEnemyHP());
     this.characterService.modifyStat('gold', 50);
     this.characterService.advanceWave();
+    this.enemyHP.set(this.combatService.calculateEnemyHP());
   }
 
   increaseAttackSpeed() {

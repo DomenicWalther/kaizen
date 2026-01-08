@@ -10,6 +10,9 @@
           "skipTests": true,
           "inlineStyle": true,
           "standalone": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         }
       },
       "root": "",

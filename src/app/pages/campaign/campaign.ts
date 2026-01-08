@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CharacterService } from '../../services/character';
 import { NgOptimizedImage } from '@angular/common';
 import { Character } from '../../models/character.model';
+import { CombatService } from '../../services/combat';
 
 @Component({
   selector: 'app-campaign',
@@ -10,6 +11,7 @@ import { Character } from '../../models/character.model';
 })
 export class Campaign {
   characterService = inject(CharacterService);
+  combatService = inject(CombatService);
   isFighting = signal(false);
   fightIntervalID: any;
   get character() {
@@ -17,46 +19,29 @@ export class Campaign {
   }
 
   attackSpeed = signal(1000);
-  attackDamage = computed(() => {
-    const char = this.character();
-    const baseDamage =
-      char.baseStrength * char.strengthModifier * char.prestigeMultipliers.strength;
-    return baseDamage;
-  });
-  damagePerSecond = computed(() => this.attackDamage() * (1000 / this.attackSpeed()));
-  enemyHP = signal(this.calculateEnemyHP());
+  enemyHP = signal(this.combatService.calculateEnemyHP());
 
-  performAttack() {
-    let attackAmount = this.attackDamage();
-    this.enemyHP.update((hp) => Math.max(0, hp - attackAmount));
-    if (this.enemyHP() === 0) {
-      this.handleEnemyDefeat();
-    }
-  }
+  // Computed signals
+  attackDamage = computed(() => this.combatService.calculateDamage());
+  damagePerSecond = computed(() => this.attackDamage() * (1000 / this.attackSpeed()));
 
   handleEnemyDefeat() {
-    this.enemyHP.set(this.calculateEnemyHP());
+    this.enemyHP.set(this.combatService.calculateEnemyHP());
     this.characterService.modifyStat('gold', 50);
-    if (this.character().currentWave == 10) {
-      this.character().currentStage += 1;
-    }
-    this.character().currentWave += this.character().currentWave < 10 ? 1 : -9;
-  }
-
-  calculateEnemyHP() {
-    const baseHP = 100;
-    const stageMultiplier = 1.6;
-    const waveMultiplier = 0.05;
-
-    const stagePower = Math.pow(stageMultiplier, this.character().currentStage - 1);
-    const wavePower = Math.pow(1 + waveMultiplier, this.character().currentWave - 1);
-    return Math.floor(baseHP * stagePower * wavePower);
+    this.characterService.advanceWave();
   }
 
   increaseAttackSpeed() {
     this.attackSpeed.update((speed) => speed / 2);
   }
 
+  performAttack() {
+    const result = this.combatService.performAttack(this.enemyHP());
+    this.enemyHP.set(result.remainingHP);
+    if (result.defeated) {
+      this.handleEnemyDefeat();
+    }
+  }
   toggleFight() {
     if (this.isFighting()) {
       clearInterval(this.fightIntervalID);

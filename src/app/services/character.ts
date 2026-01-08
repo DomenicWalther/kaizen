@@ -43,6 +43,13 @@ export class CharacterService {
     };
   }
 
+  advanceWave() {
+    this.character.update((char) => ({
+      ...char,
+      currentWave: char.currentWave < 10 ? char.currentWave + 1 : 1,
+      currentStage: char.currentWave === 10 ? char.currentStage + 1 : char.currentStage,
+    }));
+  }
   modifyStat(
     stat: keyof Pick<
       Character,

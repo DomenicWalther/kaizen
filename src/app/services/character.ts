@@ -25,12 +25,12 @@ export class CharacterService {
     return {
       id: '1',
       name: 'Hero',
-      level: 10,
-      baseStrength: 15,
-      baseIntelligence: 12,
-      baseEndurance: 14,
-      strengthModifier: 2,
-      intelligenceModifier: 3,
+      level: 1,
+      baseStrength: 1,
+      baseIntelligence: 1,
+      baseEndurance: 1,
+      strengthModifier: 1,
+      intelligenceModifier: 1,
       enduranceModifier: 1,
       prestigeLevel: 0,
       prestigeMultipliers: {
@@ -38,6 +38,7 @@ export class CharacterService {
         intelligence: 1,
         endurance: 1,
       },
+      prestigeCores: 0,
       gold: 1000,
       currentStage: 1,
       currentWave: 1,
@@ -57,6 +58,22 @@ export class CharacterService {
       currentStage: char.currentWave === 10 ? char.currentStage + 1 : char.currentStage,
     }));
   }
+
+  prestige() {
+    this.character.update((char) => {
+      const coresEarned = this.calculatePrestigeCores();
+      return {
+        ...this.returnDefaultCharacter(),
+        prestigeLevel: char.prestigeLevel + 1,
+        prestigeCores: char.prestigeCores + coresEarned,
+      };
+    });
+  }
+  calculatePrestigeCores() {
+    if (this.character().currentStage < 20) return 0;
+    return Math.floor(4 * Math.log10(this.character().currentStage));
+  }
+
   modifyStat(
     stat: keyof Pick<
       Character,

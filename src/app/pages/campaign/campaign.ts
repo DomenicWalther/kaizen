@@ -54,6 +54,17 @@ export class Campaign {
     }
   }
 
+  prestige() {
+    const coresEarned = this.characterService.calculatePrestigeCores();
+    if (coresEarned > 0) {
+      this.characterService.prestige();
+    }
+  }
+
+  skipStage20() {
+    this.character().currentStage = 21;
+  }
+
   modifyStat(
     stat: keyof Pick<
       Character,

@@ -17,6 +17,7 @@ export interface Character {
     intelligence: number;
     endurance: number;
   };
+  prestigeCores: number;
 
   gold: number;
 

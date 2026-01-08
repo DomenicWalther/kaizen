@@ -17,6 +17,7 @@
       Multipliers: {{ character().strengthModifier }} x
       {{ character().prestigeMultipliers.strength }}
     </p>
+    <p>Prestige Cores: {{ character().prestigeCores }}</p>
   </div>
   <div>
     <img ngSrc="/sprites/necromancer.png" alt="Enemy Sprite" width="256" height="294" />
@@ -33,8 +34,12 @@
 
   <button class="p-5 bg-blue-950 text-white font-bold" (click)="toggleFight()">Begin Fight</button>
   }
+  <button class="p-5 bg-yellow-600 text-white font-bold" (click)="prestige()">Prestige</button>
+  <button class="p-5 bg-green-700 text-white font-bold" (click)="skipStage20()">
+    Skip to Stage 20
+  </button>
 </section>
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-5">
+<!-- <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-5">
   <button class="px-5 py-10 bg-blue-950 text-white font-bold" (click)="increaseAttackSpeed()">
     Increase Attack Speed
   </button>
@@ -45,4 +50,4 @@
     Increase Strength
   </button>
   <button class="px-5 py-10 bg-blue-950 text-white font-bold">Increase Prestige Multiplier</button>
-</section>
+</section> -->

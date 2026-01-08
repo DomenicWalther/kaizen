@@ -1,1 +1,34 @@
-<p>character works!</p>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+  Current Prestige Cores: {{ character().prestigeCores }}
+</section>
+
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+  <h2 class="text-3xl font-bold">Available Upgrades:</h2>
+  <div class="grid grid-cols-3 gap-4 mt-5">
+    <app-prestige-upgrade-card
+      [upgradeEffect]="'Increase Attack Speed'"
+      [upgradeCurrentEffect]="'Current Effect: +0%'"
+      [upgradeCost]="5"
+    ></app-prestige-upgrade-card>
+    <app-prestige-upgrade-card
+      [upgradeEffect]="'Increase Strength Multiplier'"
+      [upgradeCurrentEffect]="'Current Effect: 0'"
+      [upgradeCost]="5"
+    ></app-prestige-upgrade-card>
+    <app-prestige-upgrade-card
+      [upgradeEffect]="'Increase Prestige Core Gain'"
+      [upgradeCurrentEffect]="'Current Effect: +0%'"
+      [upgradeCost]="5"
+    ></app-prestige-upgrade-card>
+    <app-prestige-upgrade-card
+      [upgradeEffect]="'Enemy Life Reduction'"
+      [upgradeCurrentEffect]="'Current Effect: +0%'"
+      [upgradeCost]="5"
+    ></app-prestige-upgrade-card>
+    <app-prestige-upgrade-card
+      [upgradeEffect]="'+2% DPS per unused Prestige Core (per Level)'"
+      [upgradeCurrentEffect]="'Current Effect: +0%'"
+      [upgradeCost]="5"
+    ></app-prestige-upgrade-card>
+  </div>
+</section>

@@ -13,7 +13,7 @@ export interface PrestigeUpgrade {
   currentLevel: number;
 }
 
-enum UpgradeEffectType {
+export enum UpgradeEffectType {
   FLAT_STAT_BOOST = 'flat_stat_boost',
   MULTIPLIER_BOOST = 'multiplier_boost',
   ATTACK_SPEED = 'attack_speed',
@@ -21,7 +21,7 @@ enum UpgradeEffectType {
   DYNAMIC_PER_CORE = 'dynamic_per_core',
 }
 
-enum UpgradeScalingType {
+export enum UpgradeScalingType {
   LINEAR = 'linear',
   EXPONENTIAL = 'exponential',
   FIXED_PER_LEVEL = 'fixed_per_level',

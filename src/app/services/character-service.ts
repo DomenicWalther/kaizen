@@ -87,4 +87,10 @@ export class CharacterService {
       this.character.update((char) => ({ ...char, [stat]: newValue }));
     }
   }
+  spendPrestigeCores(cost: number) {
+    this.character.update((char) => ({
+      ...char,
+      prestigeCores: char.prestigeCores - cost,
+    }));
+  }
 }

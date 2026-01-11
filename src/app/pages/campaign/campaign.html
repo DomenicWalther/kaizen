@@ -34,7 +34,13 @@
 
   <button class="p-5 bg-blue-950 text-white font-bold" (click)="toggleFight()">Begin Fight</button>
   }
-  <button class="p-5 bg-yellow-600 text-white font-bold" (click)="prestige()">Prestige</button>
+  <button
+    class="p-5 bg-yellow-600 text-white font-bold"
+    (click)="prestige()"
+    [disabled]="characterService.calculatePrestigeCores() <= 0"
+  >
+    Prestige +{{ characterService.calculatePrestigeCores() }} Cores on Prestige
+  </button>
   <button class="p-5 bg-green-700 text-white font-bold" (click)="skipStage20()">
     Skip to Stage 20
   </button>

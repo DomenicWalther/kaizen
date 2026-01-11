@@ -3,32 +3,25 @@
 </section>
 
 <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  <h2 class="text-3xl font-bold">Available Upgrades:</h2>
+  <h2 class="text-4xl font-bold">Gold Upgrades</h2>
+  <div class="mt-5">
+    <p>
+      Prestiging will reset your character back to level 1, but you will gain Prestige Cores based
+      on your current progress. These cores can be spent on powerful upgrades that persist through
+      prestiges.
+    </p>
+  </div>
+</section>
+<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+  <h2 class="text-3xl font-bold">Available Prestige Upgrades:</h2>
   <div class="grid grid-cols-3 gap-4 mt-5">
+    @for (upgrade of upgradesWithCalculations(); track $index) {
     <app-prestige-upgrade-card
-      [upgradeEffect]="'Increase Attack Speed'"
-      [upgradeCurrentEffect]="'Current Effect: +0%'"
-      [upgradeCost]="5"
+      [upgrade]="upgrade.upgrade"
+      [currentCost]="upgrade.currentCost"
+      [totalEffect]="upgrade.totalEffect"
+      (purchase)="onPurchaseUpgrade(upgrade.upgrade.id)"
     ></app-prestige-upgrade-card>
-    <app-prestige-upgrade-card
-      [upgradeEffect]="'Increase Strength Multiplier'"
-      [upgradeCurrentEffect]="'Current Effect: 0'"
-      [upgradeCost]="5"
-    ></app-prestige-upgrade-card>
-    <app-prestige-upgrade-card
-      [upgradeEffect]="'Increase Prestige Core Gain'"
-      [upgradeCurrentEffect]="'Current Effect: +0%'"
-      [upgradeCost]="5"
-    ></app-prestige-upgrade-card>
-    <app-prestige-upgrade-card
-      [upgradeEffect]="'Enemy Life Reduction'"
-      [upgradeCurrentEffect]="'Current Effect: +0%'"
-      [upgradeCost]="5"
-    ></app-prestige-upgrade-card>
-    <app-prestige-upgrade-card
-      [upgradeEffect]="'+2% DPS per unused Prestige Core (per Level)'"
-      [upgradeCurrentEffect]="'Current Effect: +0%'"
-      [upgradeCost]="5"
-    ></app-prestige-upgrade-card>
+    }
   </div>
 </section>

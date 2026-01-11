@@ -3,6 +3,7 @@ import { CharacterService } from '../../services/character-service';
 import { NgOptimizedImage } from '@angular/common';
 import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
+import { PrestigeService } from '../../services/prestige-service';
 
 @Component({
   selector: 'app-campaign',
@@ -18,7 +19,7 @@ export class Campaign {
     return this.characterService.character;
   }
 
-  attackSpeed = signal(1000);
+  attackSpeed = computed(() => this.combatService.calculateAttackSpeed());
   enemyHP = signal(this.combatService.calculateEnemyHP());
 
   // Computed signals
@@ -29,10 +30,6 @@ export class Campaign {
     this.characterService.modifyStat('gold', 50);
     this.characterService.advanceWave();
     this.enemyHP.set(this.combatService.calculateEnemyHP());
-  }
-
-  increaseAttackSpeed() {
-    this.attackSpeed.update((speed) => speed / 2);
   }
 
   performAttack() {

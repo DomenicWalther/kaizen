@@ -15,6 +15,7 @@ export class PrestigeService {
   }
 
   private upgrades = signal<PrestigeUpgrade[]>(this.loadUpgrades());
+  readonly allUpgrades = this.upgrades.asReadonly();
   loadUpgrades(): PrestigeUpgrade[] {
     const saved = localStorage.getItem('prestigeUpgrades');
     if (saved) {
@@ -43,7 +44,7 @@ export class PrestigeService {
         baseCost: 1,
         costScaling: 1.8,
         effectType: UpgradeEffectType.FLAT_STAT_BOOST,
-        effectValue: 0.1,
+        effectValue: 1,
         effectScaling: UpgradeScalingType.LINEAR,
         currentLevel: 0,
       },
@@ -113,5 +114,26 @@ export class PrestigeService {
       upgrades.map((u) => (u.id === upgradeID ? { ...u, currentLevel: u.currentLevel + 1 } : u))
     );
     return true;
+  }
+
+  getTotalEffect(effectType: UpgradeEffectType): number {
+    return this.upgrades()
+      .filter((u) => u.effectType === effectType)
+      .reduce((total, upgrade) => {
+        return total + this.calculateEffect(upgrade);
+      }, 0);
+  }
+
+  private calculateEffect(upgrade: PrestigeUpgrade): number {
+    switch (upgrade.effectScaling) {
+      case UpgradeScalingType.LINEAR:
+        return upgrade.effectValue * upgrade.currentLevel;
+      case UpgradeScalingType.EXPONENTIAL:
+        return Math.pow(upgrade.effectValue, upgrade.currentLevel);
+      case UpgradeScalingType.FIXED_PER_LEVEL:
+        return upgrade.effectValue * (upgrade.currentLevel > 0 ? 1 : 0);
+      default:
+        return 0;
+    }
   }
 }

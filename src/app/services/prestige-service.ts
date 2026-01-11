@@ -2,6 +2,11 @@ import { effect, inject, Injectable, signal } from '@angular/core';
 import { CharacterService } from './character-service';
 import { PrestigeUpgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 
+interface UpgradeSaveData {
+  id: string;
+  currentLevel: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -10,18 +15,31 @@ export class PrestigeService {
 
   constructor() {
     effect(() => {
-      localStorage.setItem('prestigeUpgrades', JSON.stringify(this.upgrades()));
+      const saveData = this.upgrades().map((upgrade) => ({
+        id: upgrade.id,
+        currentLevel: upgrade.currentLevel,
+      }));
+      localStorage.setItem('prestigeUpgrades', JSON.stringify(saveData));
     });
   }
 
   private upgrades = signal<PrestigeUpgrade[]>(this.loadUpgrades());
   readonly allUpgrades = this.upgrades.asReadonly();
   loadUpgrades(): PrestigeUpgrade[] {
+    const defaultUpgrades = this.getDefaultUpgrades();
     const saved = localStorage.getItem('prestigeUpgrades');
-    if (saved) {
-      return JSON.parse(saved);
+    if (!saved) {
+      return defaultUpgrades;
     }
-    return this.getDefaultUpgrades();
+    const savedProgresss: UpgradeSaveData[] = JSON.parse(saved);
+
+    return defaultUpgrades.map((upgrade) => {
+      const savedUpgrade = savedProgresss.find((s) => s.id === upgrade.id);
+      return {
+        ...upgrade,
+        currentLevel: savedUpgrade?.currentLevel ?? 0,
+      };
+    });
   }
 
   private getDefaultUpgrades(): PrestigeUpgrade[] {
@@ -40,7 +58,7 @@ export class PrestigeService {
       {
         id: 'strength_multiplier',
         name: 'Titans Power',
-        description: 'Increase strength multiplier by 0.1 per Level',
+        description: 'Increase strength by 1 per Level',
         baseCost: 1,
         costScaling: 1.8,
         effectType: UpgradeEffectType.FLAT_STAT_BOOST,

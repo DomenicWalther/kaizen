@@ -1,6 +1,5 @@
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { Character } from '../models/character.model';
-import { PrestigeService } from './prestige-service';
 
 @Injectable({
   providedIn: 'root',

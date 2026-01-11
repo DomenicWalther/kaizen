@@ -7,7 +7,7 @@ import { CharacterService } from './character-service';
   providedIn: 'root',
 })
 export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
-  private characterService = inject(CharacterService);
+  private readonly characterService = inject(CharacterService);
 
   constructor() {
     super('prestigeUpgrades');
@@ -51,7 +51,7 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
         name: 'Kaizen Mastery',
         description: 'Increase Kaizen-Core gain by 10% per Level',
         baseCost: 1,
-        costScaling: 2.0,
+        costScaling: 2,
         effectType: UpgradeEffectType.MULTIPLIER_BOOST,
         effectValue: 0.1,
         effectScaling: UpgradeScalingType.LINEAR,

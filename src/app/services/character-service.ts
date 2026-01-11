@@ -1,12 +1,12 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { Character } from '../models/character.model';
+import { PrestigeService } from './prestige-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CharacterService {
   character = signal<Character>(this.loadCharacter());
-
   constructor() {
     effect(() => {
       localStorage.setItem('character', JSON.stringify(this.character()));
@@ -59,25 +59,16 @@ export class CharacterService {
     }));
   }
 
-  prestige() {
-    this.character.update((char) => {
-      const coresEarned = this.calculatePrestigeCores();
-      return {
-        ...this.returnDefaultCharacter(),
-        prestigeLevel: char.prestigeLevel + 1,
-        prestigeCores: char.prestigeCores + coresEarned,
-      };
-    });
-  }
-  calculatePrestigeCores() {
-    if (this.character().currentStage < 20) return 0;
-    return Math.floor(4 * Math.log10(this.character().currentStage));
-  }
-
   modifyStat(
     stat: keyof Pick<
       Character,
-      'level' | 'baseStrength' | 'baseIntelligence' | 'baseEndurance' | 'gold'
+      | 'level'
+      | 'baseStrength'
+      | 'baseIntelligence'
+      | 'baseEndurance'
+      | 'gold'
+      | 'prestigeLevel'
+      | 'prestigeCores'
     >,
     amount: number
   ) {

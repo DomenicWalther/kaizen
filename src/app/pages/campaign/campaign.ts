@@ -13,6 +13,7 @@ import { PrestigeService } from '../../services/prestige-service';
 export class Campaign {
   characterService = inject(CharacterService);
   combatService = inject(CombatService);
+  prestigeService = inject(PrestigeService);
   isFighting = signal(false);
   fightIntervalID: any;
   get character() {
@@ -52,9 +53,9 @@ export class Campaign {
   }
 
   prestige() {
-    const coresEarned = this.characterService.calculatePrestigeCores();
+    const coresEarned = this.prestigeService.calculatePrestigeCores();
     if (coresEarned > 0) {
-      this.characterService.prestige();
+      this.prestigeService.prestige();
     }
   }
 

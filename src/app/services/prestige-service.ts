@@ -136,4 +136,19 @@ export class PrestigeService {
         return 0;
     }
   }
+  prestige() {
+    const coresEarned = this.calculatePrestigeCores();
+    this.characterService.resetCharacter();
+    this.characterService.modifyStat('prestigeCores', coresEarned);
+    this.characterService.modifyStat('prestigeLevel', 1);
+  }
+
+  calculatePrestigeCores() {
+    if (this.characterService.character().currentStage < 20) return 0;
+    const prestigeCoreGain = Math.floor(
+      4 * Math.log10(this.characterService.character().currentStage)
+    );
+    const multiplier = 1 + this.getTotalEffect(UpgradeEffectType.MULTIPLIER_BOOST);
+    return Math.floor(prestigeCoreGain * multiplier);
+  }
 }

@@ -1,26 +1,30 @@
 <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  Current Prestige Cores: {{ character().prestigeCores }}
+  <p>Current Prestige Cores: {{ character().prestigeCores }}</p>
+  <p>Current Gold: {{ character().gold }}</p>
 </section>
 
 <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  <h2 class="text-4xl font-bold">Gold Upgrades</h2>
-  <div class="mt-5">
-    <p>
-      Prestiging will reset your character back to level 1, but you will gain Prestige Cores based
-      on your current progress. These cores can be spent on powerful upgrades that persist through
-      prestiges.
-    </p>
+  <h2 class="text-4xl font-bold">Available Gold Upgrades:</h2>
+  <div class="grid grid-cols-3 gap-4 mt-5">
+    @for (upgrade of goldUpgrades(); track $index) {
+    <app-prestige-upgrade-card
+      [upgrade]="upgrade.upgrade"
+      [currentCost]="upgrade.currentCost"
+      [totalEffect]="upgrade.totalEffect"
+      (purchase)="onGoldPurchaseUpgrade(upgrade.upgrade.id)"
+    ></app-prestige-upgrade-card>
+    }
   </div>
 </section>
 <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
   <h2 class="text-3xl font-bold">Available Prestige Upgrades:</h2>
   <div class="grid grid-cols-3 gap-4 mt-5">
-    @for (upgrade of upgradesWithCalculations(); track $index) {
+    @for (upgrade of prestigeUpgrades(); track $index) {
     <app-prestige-upgrade-card
       [upgrade]="upgrade.upgrade"
       [currentCost]="upgrade.currentCost"
       [totalEffect]="upgrade.totalEffect"
-      (purchase)="onPurchaseUpgrade(upgrade.upgrade.id)"
+      (purchase)="onPrestigePurchaseUpgrade(upgrade.upgrade.id)"
     ></app-prestige-upgrade-card>
     }
   </div>

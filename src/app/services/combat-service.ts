@@ -1,14 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { CharacterService } from './character-service';
-import { PrestigeService } from './prestige-service';
 import { UpgradeEffectType } from '../models/prestige.model';
+import { PrestigeUpgradeService } from './prestige-upgrade-service';
+import { GoldUpgradeService } from './gold-upgrade-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CombatService {
   characterService = inject(CharacterService);
-  prestigeService = inject(PrestigeService);
+  prestigeUpgradeService = inject(PrestigeUpgradeService);
+  goldUpgradeService = inject(GoldUpgradeService);
 
   calculateEnemyHP() {
     const character = this.characterService.character();
@@ -19,7 +21,7 @@ export class CombatService {
     const stagePower = Math.pow(stageMultiplier, character.currentStage - 1);
     const wavePower = Math.pow(1 + waveMultiplier, character.currentWave - 1);
     let enemyHP = Math.floor(baseHP * stagePower * wavePower);
-    const healthReduction = this.prestigeService.getTotalEffect(
+    const healthReduction = this.prestigeUpgradeService.getTotalEffect(
       UpgradeEffectType.ENEMY_HEALTH_REDUCTION
     );
 
@@ -30,12 +32,19 @@ export class CombatService {
   calculateDamage(): number {
     const character = this.characterService.character();
     let damage =
-      character.baseStrength * character.strengthModifier * character.prestigeMultipliers.strength;
+      (character.baseStrength +
+        this.goldUpgradeService.getTotalEffect(UpgradeEffectType.FLAT_STAT_BOOST)) *
+      character.strengthModifier *
+      character.prestigeMultipliers.strength;
 
-    const strengthBoost = this.prestigeService.getTotalEffect(UpgradeEffectType.FLAT_STAT_BOOST);
+    const strengthBoost = this.prestigeUpgradeService.getTotalEffect(
+      UpgradeEffectType.FLAT_STAT_BOOST
+    );
     damage *= 1 + strengthBoost;
 
-    const dpsPerCore = this.prestigeService.getTotalEffect(UpgradeEffectType.DYNAMIC_PER_CORE);
+    const dpsPerCore = this.prestigeUpgradeService.getTotalEffect(
+      UpgradeEffectType.DYNAMIC_PER_CORE
+    );
     const unusedCores = character.prestigeCores;
     damage *= 1 + dpsPerCore * unusedCores;
     return Math.floor(damage);
@@ -43,7 +52,9 @@ export class CombatService {
 
   calculateAttackSpeed(): number {
     const baseAttackSpeed = 1000;
-    const attackSpeedBoost = this.prestigeService.getTotalEffect(UpgradeEffectType.ATTACK_SPEED);
+    const attackSpeedBoost = this.prestigeUpgradeService.getTotalEffect(
+      UpgradeEffectType.ATTACK_SPEED
+    );
     const finalAttackSpeed = Math.floor(baseAttackSpeed * (1 - attackSpeedBoost));
     return finalAttackSpeed;
   }

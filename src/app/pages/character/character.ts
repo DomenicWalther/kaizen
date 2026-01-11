@@ -1,7 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
 import { PrestigeUpgradeCard } from '../../components/prestige-upgrade-card/prestige-upgrade-card';
-import { PrestigeService } from '../../services/prestige-service';
+import { PrestigeUpgradeService } from '../../services/prestige-upgrade-service';
+import { GoldUpgradeService } from '../../services/gold-upgrade-service';
 
 @Component({
   selector: 'app-character',
@@ -10,20 +11,33 @@ import { PrestigeService } from '../../services/prestige-service';
 })
 export class Character {
   characterService = inject(CharacterService);
-  prestigeService = inject(PrestigeService);
+  prestigeUpgradeService = inject(PrestigeUpgradeService);
+  goldUpgradeService = inject(GoldUpgradeService);
   get character() {
     return this.characterService.character;
   }
 
-  upgradesWithCalculations = computed(() => {
-    return this.prestigeService.allUpgrades().map((upgrade) => ({
+  prestigeUpgrades = computed(() => {
+    return this.prestigeUpgradeService.allUpgrades().map((upgrade) => ({
       upgrade,
-      currentCost: this.prestigeService.calculateCost(upgrade),
-      totalEffect: this.prestigeService.getTotalEffect(upgrade.effectType),
+      currentCost: this.prestigeUpgradeService.calculateCost(upgrade),
+      totalEffect: this.prestigeUpgradeService.getTotalEffect(upgrade.effectType),
     }));
   });
 
-  onPurchaseUpgrade(upgradeId: string) {
-    this.prestigeService.purchaseUpgrade(upgradeId);
+  goldUpgrades = computed(() => {
+    return this.goldUpgradeService.allUpgrades().map((upgrade) => ({
+      upgrade,
+      currentCost: this.goldUpgradeService.calculateCost(upgrade),
+      totalEffect: this.goldUpgradeService.getTotalEffect(upgrade.effectType),
+    }));
+  });
+
+  onGoldPurchaseUpgrade(upgradeId: string) {
+    this.goldUpgradeService.purchaseUpgrade(upgradeId);
+  }
+
+  onPrestigePurchaseUpgrade(upgradeId: string) {
+    this.prestigeUpgradeService.purchaseUpgrade(upgradeId);
   }
 }

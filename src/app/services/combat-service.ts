@@ -58,4 +58,17 @@ export class CombatService {
       defeated: remainingHP === 0,
     };
   }
+
+  calculateGoldReward(): number {
+    const baseGold = 10 * this.characterService.character().currentStage;
+    const waveBonusGold = 1 + this.characterService.character().currentWave * 0.05;
+
+    let gold = baseGold * waveBonusGold;
+
+    const critChance = 0.1;
+    if (Math.random() < critChance) {
+      gold *= 2;
+    }
+    return gold;
+  }
 }

@@ -28,23 +28,9 @@ export class Campaign {
   damagePerSecond = computed(() => this.attackDamage() * (1000 / this.attackSpeed()));
 
   handleEnemyDefeat() {
-    this.characterService.modifyStat('gold', this.calculateGoldReward());
+    this.characterService.modifyStat('gold', this.combatService.calculateGoldReward());
     this.characterService.advanceWave();
     this.enemyHP.set(this.combatService.calculateEnemyHP());
-  }
-
-  calculateGoldReward(): number {
-    const baseGold = 10 * this.character().currentStage;
-
-    const waveBonus = 1 + this.character().currentWave * 0.05;
-
-    let gold = baseGold * waveBonus;
-
-    const critChance = 0.1;
-    if (Math.random() < critChance) {
-      gold *= 2;
-    }
-    return 2;
   }
 
   performAttack() {
@@ -54,6 +40,7 @@ export class Campaign {
       this.handleEnemyDefeat();
     }
   }
+
   toggleFight() {
     if (this.isFighting()) {
       clearInterval(this.fightIntervalID);

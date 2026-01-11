@@ -1,4 +1,4 @@
-export interface PrestigeUpgrade {
+export interface Upgrade {
   id: string;
   name: string;
   description: string;

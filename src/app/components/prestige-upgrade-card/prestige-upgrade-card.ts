@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { PrestigeUpgrade } from '../../models/prestige.model';
+import { Upgrade } from '../../models/prestige.model';
 
 @Component({
   selector: 'app-prestige-upgrade-card',
@@ -7,7 +7,7 @@ import { PrestigeUpgrade } from '../../models/prestige.model';
   templateUrl: './prestige-upgrade-card.html',
 })
 export class PrestigeUpgradeCard {
-  upgrade = input.required<PrestigeUpgrade>();
+  upgrade = input.required<Upgrade>();
   currentCost = input.required<number>();
   totalEffect = input.required<number>();
   purchase = output<void>();

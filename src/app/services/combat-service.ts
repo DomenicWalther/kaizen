@@ -14,8 +14,15 @@ export class CombatService {
   isFighting = signal(false);
   fightIntervalID: any;
 
+  isSwiftAttacking = false;
   enemyHP = signal(this.calculateEnemyHP());
 
+  useSwiftAttackSkill() {
+    this.isSwiftAttacking = true;
+    setTimeout(() => {
+      this.isSwiftAttacking = false;
+    }, 5000);
+  }
   startFighting() {
     if (this.isFighting()) {
       clearInterval(this.fightIntervalID);
@@ -96,7 +103,10 @@ export class CombatService {
     const attackSpeedBoost = this.prestigeUpgradeService.getTotalEffect(
       UpgradeEffectType.ATTACK_SPEED
     );
-    const finalAttackSpeed = Math.floor(baseAttackSpeed * (1 - attackSpeedBoost));
+    const swiftAttackSkill = this.isSwiftAttacking ? 0.5 : 1;
+    const finalAttackSpeed = Math.floor(
+      baseAttackSpeed * (1 - attackSpeedBoost) * swiftAttackSkill
+    );
     return finalAttackSpeed;
   }
 

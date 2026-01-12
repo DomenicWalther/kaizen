@@ -36,7 +36,7 @@
   <button class="p-5 bg-blue-950 text-white font-bold" (click)="toggleFight()">Begin Fight</button>
   }
   <button
-    class="p-5 bg-yellow-600 text-white font-bold"
+    class="p-5 bg-yellow-600 text-white font-bold disabled:bg-gray-700"
     (click)="prestige()"
     [disabled]="prestigeService.calculatePrestigeCores() <= 0"
   >
@@ -46,8 +46,9 @@
     Skip to Stage 20
   </button>
   <button
-    class="p-5 bg-purple-700 text-white font-bold"
-    (click)="this.combatService.useSwiftAttackSkill()"
+    class="p-5 bg-purple-700 text-white font-bold disabled:bg-gray-700"
+    (click)="combatService.useSwiftAttackSkill()"
+    [disabled]="combatService.isSwiftAttacking()"
   >
     Use Swift Attack Skill
   </button>

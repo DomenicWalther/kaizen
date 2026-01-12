@@ -19,6 +19,8 @@ export enum UpgradeEffectType {
   ATTACK_SPEED = 'attack_speed',
   ENEMY_HEALTH_REDUCTION = 'enemy_health_reduction',
   DYNAMIC_PER_CORE = 'dynamic_per_core',
+  CRITICAL_CHANCE_BOOST = 'critical_chance_boost',
+  CRITICAL_DAMAGE_BOOST = 'critical_damage_boost',
 }
 
 export enum UpgradeScalingType {

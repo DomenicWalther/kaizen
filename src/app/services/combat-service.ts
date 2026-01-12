@@ -36,9 +36,10 @@ export class CombatService {
   performAttack() {
     let attackAmount = this.calculateDamage();
     if (this.criticalHit()) {
-      attackAmount *= 2;
+      attackAmount *=
+        2 + this.goldUpgradeService.getTotalEffect(UpgradeEffectType.CRITICAL_DAMAGE_BOOST);
     }
-    const remainingHP = Math.max(0, this.enemyHP() - attackAmount);
+    const remainingHP = Math.max(0, Math.floor(this.enemyHP() - attackAmount));
     const defeated = remainingHP === 0;
     this.enemyHP.set(remainingHP);
     if (defeated) {
@@ -47,7 +48,8 @@ export class CombatService {
   }
 
   criticalHit() {
-    const criticalChance = 0.1;
+    const criticalChance =
+      0.1 + this.goldUpgradeService.getTotalEffect(UpgradeEffectType.CRITICAL_CHANCE_BOOST);
     return Math.random() < criticalChance;
   }
 
@@ -108,6 +110,6 @@ export class CombatService {
     if (Math.random() < critChance) {
       gold *= 2;
     }
-    return gold;
+    return Math.floor(gold);
   }
 }

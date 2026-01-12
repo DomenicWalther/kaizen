@@ -46,6 +46,28 @@ export class GoldUpgradeService extends BaseUpgradeService<Upgrade> {
         effectScaling: UpgradeScalingType.LINEAR,
         currentLevel: 0,
       },
+      {
+        id: 'gold_critical_chance_basic',
+        name: 'KaaChow Statue',
+        description: 'Gain 1% additive Critical Chance per Level',
+        baseCost: 50,
+        costScaling: 1.2,
+        effectType: UpgradeEffectType.CRITICAL_CHANCE_BOOST,
+        effectValue: 0.01,
+        effectScaling: UpgradeScalingType.LINEAR,
+        currentLevel: 0,
+      },
+      {
+        id: 'gold_critical_damage_basic',
+        name: 'Heavy Hitter',
+        description: 'Gain 5% additive Critical Damage per Level',
+        baseCost: 50,
+        costScaling: 1.2,
+        effectType: UpgradeEffectType.CRITICAL_DAMAGE_BOOST,
+        effectValue: 0.05,
+        effectScaling: UpgradeScalingType.LINEAR,
+        currentLevel: 0,
+      },
     ];
   }
 }

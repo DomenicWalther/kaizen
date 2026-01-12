@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { CharacterService } from './character-service';
 import { UpgradeEffectType } from '../models/prestige.model';
 import { PrestigeUpgradeService } from './prestige-upgrade-service';
@@ -11,6 +11,37 @@ export class CombatService {
   characterService = inject(CharacterService);
   prestigeUpgradeService = inject(PrestigeUpgradeService);
   goldUpgradeService = inject(GoldUpgradeService);
+  isFighting = signal(false);
+  fightIntervalID: any;
+
+  enemyHP = signal(this.calculateEnemyHP());
+
+  startFighting() {
+    if (this.isFighting()) {
+      clearInterval(this.fightIntervalID);
+      this.isFighting.set(false);
+    } else {
+      this.fightIntervalID = setInterval(() => {
+        this.performAttack();
+      }, this.calculateAttackSpeed());
+      this.isFighting.set(true);
+    }
+  }
+  handleEnemyDefeat() {
+    this.characterService.modifyStat('gold', this.calculateGoldReward());
+    this.characterService.advanceWave();
+    this.enemyHP.set(this.calculateEnemyHP());
+  }
+
+  performAttack() {
+    let attackAmount = this.calculateDamage();
+    const remainingHP = Math.max(0, this.enemyHP() - attackAmount);
+    const defeated = remainingHP === 0;
+    this.enemyHP.set(remainingHP);
+    if (defeated) {
+      this.handleEnemyDefeat();
+    }
+  }
 
   calculateEnemyHP() {
     const character = this.characterService.character();
@@ -57,17 +88,6 @@ export class CombatService {
     );
     const finalAttackSpeed = Math.floor(baseAttackSpeed * (1 - attackSpeedBoost));
     return finalAttackSpeed;
-  }
-  performAttack(currentHP: number): {
-    remainingHP: number;
-    defeated: boolean;
-  } {
-    let attackAmount = this.calculateDamage();
-    const remainingHP = Math.max(0, currentHP - attackAmount);
-    return {
-      remainingHP,
-      defeated: remainingHP === 0,
-    };
   }
 
   calculateGoldReward(): number {

@@ -11,7 +11,7 @@
   <div>
     <p>Your Damage: {{ attackDamage() }}</p>
     <p>Damage per Second: {{ damagePerSecond() }}</p>
-    <p>Your Attack Speed: {{ 1000 / attackSpeed() }}/s</p>
+    <p>Your Attack Speed: {{ 1000 / combatService.calculateAttackSpeed() }}/s</p>
     <p>Strength: {{ character().baseStrength }}</p>
     <p>
       Multipliers: {{ character().strengthModifier }} x
@@ -22,14 +22,14 @@
   </div>
   <div>
     <img ngSrc="/sprites/necromancer.png" alt="Enemy Sprite" width="256" height="294" />
-    <p>Enemy HP: {{ enemyHP() }}</p>
+    <p>Enemy HP: {{ combatService.enemyHP() }}</p>
     <progress
-      [value]="enemyHP()"
+      [value]="combatService.enemyHP()"
       [max]="combatService.calculateEnemyHP()"
       class="[&::-webkit-progress-bar]:bg-green-600 [&::-moz-progress-bar]:bg-green-600 bg-red-900"
     ></progress>
   </div>
-  @if (isFighting()) {
+  @if (combatService.isFighting()) {
   <button class="p-5 bg-gray-500 text-white font-bold" (click)="toggleFight()">Stop Fight</button>
   } @else {
 

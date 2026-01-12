@@ -20,37 +20,14 @@ export class Campaign {
     return this.characterService.character;
   }
 
-  attackSpeed = computed(() => this.combatService.calculateAttackSpeed());
-  enemyHP = signal(this.combatService.calculateEnemyHP());
-
   // Computed signals
   attackDamage = computed(() => this.combatService.calculateDamage());
-  damagePerSecond = computed(() => this.attackDamage() * (1000 / this.attackSpeed()));
-
-  handleEnemyDefeat() {
-    this.characterService.modifyStat('gold', this.combatService.calculateGoldReward());
-    this.characterService.advanceWave();
-    this.enemyHP.set(this.combatService.calculateEnemyHP());
-  }
-
-  performAttack() {
-    const result = this.combatService.performAttack(this.enemyHP());
-    this.enemyHP.set(result.remainingHP);
-    if (result.defeated) {
-      this.handleEnemyDefeat();
-    }
-  }
+  damagePerSecond = computed(
+    () => this.attackDamage() * (1000 / this.combatService.calculateAttackSpeed())
+  );
 
   toggleFight() {
-    if (this.isFighting()) {
-      clearInterval(this.fightIntervalID);
-      this.isFighting.set(false);
-    } else {
-      this.fightIntervalID = setInterval(() => {
-        this.performAttack();
-      }, this.attackSpeed());
-      this.isFighting.set(true);
-    }
+    this.combatService.startFighting();
   }
 
   prestige() {

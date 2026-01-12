@@ -41,10 +41,6 @@ export class Campaign {
     this.character().currentStage = 21;
   }
 
-  useSwiftAttackSkill() {
-    this.combatService.useSwiftAttackSkill();
-  }
-
   modifyStat(
     stat: keyof Pick<
       Character,

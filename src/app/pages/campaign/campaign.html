@@ -45,7 +45,10 @@
   <button class="p-5 bg-green-700 text-white font-bold" (click)="skipStage20()">
     Skip to Stage 20
   </button>
-  <button class="p-5 bg-purple-700 text-white font-bold" (click)="useSwiftAttackSkill()">
+  <button
+    class="p-5 bg-purple-700 text-white font-bold"
+    (click)="this.combatService.useSwiftAttackSkill()"
+  >
     Use Swift Attack Skill
   </button>
 </section>

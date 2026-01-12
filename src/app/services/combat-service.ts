@@ -35,12 +35,20 @@ export class CombatService {
 
   performAttack() {
     let attackAmount = this.calculateDamage();
+    if (this.criticalHit()) {
+      attackAmount *= 2;
+    }
     const remainingHP = Math.max(0, this.enemyHP() - attackAmount);
     const defeated = remainingHP === 0;
     this.enemyHP.set(remainingHP);
     if (defeated) {
       this.handleEnemyDefeat();
     }
+  }
+
+  criticalHit() {
+    const criticalChance = 0.1;
+    return Math.random() < criticalChance;
   }
 
   calculateEnemyHP() {

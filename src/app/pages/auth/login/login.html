@@ -1,0 +1,14 @@
+<div *cvaUnauthenticated>
+  <button (click)="signIn()">Sign In</button>
+  <button (click)="signUp()">Sign Up</button>
+</div>
+
+<div *cvaAuthenticated>
+  <button (click)="signOut()">Sign Out</button>
+</div>
+
+<div *cvaAuthLoading>
+  <p>Loading...</p>
+</div>
+
+<button (click)="logUser()">Log User</button>

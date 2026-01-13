@@ -26,4 +26,10 @@ export const routes: Routes = [
       return import('./pages/campaign/campaign').then((m) => m.Campaign);
     },
   },
+  {
+    path: 'auth/login',
+    loadComponent: () => {
+      return import('./pages/auth/login/login').then((m) => m.Login);
+    },
+  },
 ];

@@ -13,13 +13,14 @@ import {
 
 import { routes } from './app.routes';
 import { ClerkAuthService } from './services/clerk-auth.service';
+import { environment } from '../environments/environment.development';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideConvex('https://robust-seal-771.convex.cloud'),
+    provideConvex(environment.convexPublicUrl),
     { provide: CLERK_AUTH, useClass: ClerkAuthService },
     provideClerkAuth(),
     { provide: CONVEX_AUTH_GUARD_CONFIG, useValue: { loginRoute: '/auth/login' } },

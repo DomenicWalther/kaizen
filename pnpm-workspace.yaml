@@ -1,0 +1,10 @@
+onlyBuiltDependencies:
+  - '@clerk/shared'
+  - '@parcel/watcher'
+  - browser-tabs-lock
+  - bufferutil
+  - core-js
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - utf-8-validate

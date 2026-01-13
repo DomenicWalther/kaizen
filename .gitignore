@@ -27,7 +27,6 @@ yarn-error.log
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
-
 # Miscellaneous
 /.angular/cache
 .sass-cache/
@@ -43,3 +42,4 @@ __screenshots__/
 Thumbs.db
 
 .env.local
+/src/environments/*

@@ -9,6 +9,7 @@
  */
 
 import type * as todo from "../todo.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -18,6 +19,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   todo: typeof todo;
+  users: typeof users;
 }>;
 
 /**

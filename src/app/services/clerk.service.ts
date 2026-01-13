@@ -41,6 +41,7 @@ export class ClerkService {
   }
 
   async getToken(options?: { template?: string; skipCache?: boolean }): Promise<string | null> {
-    return (await this.clerk.session?.getToken(options)) ?? null;
+    const token = await this.clerk.session?.getToken(options);
+    return token ?? null;
   }
 }

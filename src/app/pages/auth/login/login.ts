@@ -18,9 +18,6 @@ export class Login {
 
   constructor(private clerk: ClerkService) {}
 
-  logUser() {
-    console.log(this.clerk.user());
-  }
   signIn() {
     this.clerk.openSignIn();
   }

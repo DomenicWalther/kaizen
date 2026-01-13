@@ -18,17 +18,24 @@ export class StoreUserService {
     effect(() => {
       const isAuthed = this.convex.isSignedIn();
       const user = this.clerk.user();
+      const userId = this.clerk.user()?.id;
+
+      const storedUserId = localStorage.getItem('convex_user_stores');
+      if (storedUserId === userId) {
+        this.stored = true;
+        return;
+      }
 
       if (!isAuthed || !user) {
         this.stored = false;
         return;
       }
 
-      this.storeOnce();
+      this.storeOnce(userId);
     });
   }
 
-  private async storeOnce() {
+  private async storeOnce(userId: string | undefined) {
     if (this.stored || this.storing) {
       return;
     }
@@ -36,6 +43,7 @@ export class StoreUserService {
     try {
       await this.storeUserMutation.mutate({});
       this.stored = true;
+      localStorage.setItem('convex_user_stores', userId!);
     } finally {
       this.storing = false;
     }

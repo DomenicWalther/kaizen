@@ -11,6 +11,7 @@
       [upgrade]="upgrade.upgrade"
       [currentCost]="upgrade.currentCost"
       [totalEffect]="upgrade.totalEffect"
+      [label]="'Gold'"
       (purchase)="onGoldPurchaseUpgrade(upgrade.upgrade.id)"
     ></app-prestige-upgrade-card>
     }
@@ -24,6 +25,7 @@
       [upgrade]="upgrade.upgrade"
       [currentCost]="upgrade.currentCost"
       [totalEffect]="upgrade.totalEffect"
+      [label]="'Prestige Cores'"
       (purchase)="onPrestigePurchaseUpgrade(upgrade.upgrade.id)"
     ></app-prestige-upgrade-card>
     }

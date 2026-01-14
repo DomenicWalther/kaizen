@@ -23,9 +23,14 @@ export class Campaign {
   // Computed signals
   attackDamage = computed(() => this.combatService.calculateDamage());
   damagePerSecond = computed(
-    () => this.attackDamage() * (1000 / this.combatService.calculateAttackSpeed())
+    () =>
+      Math.floor(this.attackDamage() * (1000 / this.combatService.calculateAttackSpeed()) * 100) /
+      100
   );
 
+  attackSpeed = computed(
+    () => Math.floor((1000 / this.combatService.calculateAttackSpeed()) * 100) / 100
+  );
   toggleFight() {
     this.combatService.startFighting();
   }

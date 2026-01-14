@@ -4,6 +4,6 @@
 >
   <p class="text-xl font-bold text-center">{{ upgrade().name }}</p>
   <p class="text-center text-sm text-gray-400">{{ upgrade().description }}</p>
-  <p>{{ totalEffect() }}</p>
-  <button>Cost: {{ currentCost() }} Prestige Cores</button>
+  <p>{{ flooredTotalEffect() }}</p>
+  <button>Cost: {{ currentCost() }} {{ label() }}</button>
 </div>

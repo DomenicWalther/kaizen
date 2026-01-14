@@ -11,7 +11,7 @@
   <div>
     <p>Your Damage: {{ attackDamage() }}</p>
     <p>Damage per Second: {{ damagePerSecond() }}</p>
-    <p>Your Attack Speed: {{ 1000 / combatService.calculateAttackSpeed() }}/s</p>
+    <p>Your Attack Speed: {{ attackSpeed() }}/s</p>
     <p>Strength: {{ character().baseStrength }}</p>
     <p>
       Multipliers: {{ character().strengthModifier }} x

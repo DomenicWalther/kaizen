@@ -6,12 +6,17 @@ export interface UpgradeSaveData {
   currentLevel: number;
 }
 
+interface UpdateQuery {
+  data: () => { id: string; currentLevel: number }[] | undefined | null;
+}
 @Injectable()
-export abstract class BaseUpgradeService<T extends { id: string; currentLevel: number }> {
+export abstract class BaseUpgradeService<
+  T extends { id: string; currentLevel: number; effectType: UpgradeEffectType }
+> {
   protected upgrades = signal<T[]>([]);
   readonly allUpgrades = this.upgrades.asReadonly();
 
-  protected init(getDefaultUpgrades: () => T[], query: any) {
+  protected init(getDefaultUpgrades: () => T[], query: UpdateQuery) {
     const defaultUpgrades = getDefaultUpgrades();
 
     effect(() => {
@@ -69,8 +74,8 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
 
   getTotalEffect(effectType: UpgradeEffectType): number {
     return this.upgrades()
-      .filter((u: any) => u.effectType === effectType)
-      .reduce((total, upgrade: any) => {
+      .filter((u: T) => u.effectType === effectType)
+      .reduce((total, upgrade) => {
         return total + this.calculateEffect(upgrade);
       }, 0);
   }

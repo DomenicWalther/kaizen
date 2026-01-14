@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BaseUpgradeService } from './base-upgrade';
 import { Upgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 import { CharacterService } from './character-service';

@@ -18,7 +18,7 @@ export class Character {
   }
 
   prestigeUpgrades = computed(() => {
-    return this.prestigeUpgradeService.allUpgrades().map((upgrade: any) => ({
+    return this.prestigeUpgradeService.allUpgrades().map((upgrade) => ({
       upgrade,
       currentCost: this.prestigeUpgradeService.calculateCost(upgrade),
       totalEffect: this.prestigeUpgradeService.calculateEffect(upgrade),
@@ -26,7 +26,7 @@ export class Character {
   });
 
   goldUpgrades = computed(() => {
-    return this.goldUpgradeService.allUpgrades().map((upgrade: any) => ({
+    return this.goldUpgradeService.allUpgrades().map((upgrade) => ({
       upgrade,
       currentCost: this.goldUpgradeService.calculateCost(upgrade),
       totalEffect: this.goldUpgradeService.calculateEffect(upgrade),

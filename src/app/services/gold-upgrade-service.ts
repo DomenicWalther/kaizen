@@ -30,7 +30,6 @@ export class GoldUpgradeService extends BaseUpgradeService<Upgrade> {
         currentLevel: upgrade.currentLevel,
       })
     );
-    console.log(upgradesToSave);
     this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
   }
   protected override spendCurrency(amount: number) {

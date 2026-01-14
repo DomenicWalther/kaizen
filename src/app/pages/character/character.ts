@@ -21,16 +21,15 @@ export class Character {
     return this.prestigeUpgradeService.allUpgrades().map((upgrade: any) => ({
       upgrade,
       currentCost: this.prestigeUpgradeService.calculateCost(upgrade),
-      totalEffect: this.prestigeUpgradeService.getTotalEffect(upgrade.effectType),
+      totalEffect: this.prestigeUpgradeService.calculateEffect(upgrade),
     }));
   });
 
   goldUpgrades = computed(() => {
-    console.log('Recomputing gold upgrades', this.goldUpgradeService.allUpgrades());
     return this.goldUpgradeService.allUpgrades().map((upgrade: any) => ({
       upgrade,
       currentCost: this.goldUpgradeService.calculateCost(upgrade),
-      totalEffect: this.goldUpgradeService.getTotalEffect(upgrade.effectType),
+      totalEffect: this.goldUpgradeService.calculateEffect(upgrade),
     }));
   });
 

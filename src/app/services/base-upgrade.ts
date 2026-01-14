@@ -75,7 +75,7 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
       }, 0);
   }
 
-  protected calculateEffect(upgrade: any): number {
+  calculateEffect(upgrade: any): number {
     switch (upgrade.effectScaling) {
       case 'linear':
         return upgrade.effectValue * upgrade.currentLevel;

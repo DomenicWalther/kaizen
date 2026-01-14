@@ -1,7 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { UpgradeEffectType } from '../models/prestige.model';
-import { QueryResult } from 'convex-angular';
-import { DataModel, Doc } from '../../../convex/_generated/dataModel';
 
 export interface UpgradeSaveData {
   id: string;
@@ -19,7 +17,6 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
     effect(() => {
       const dbUpgrades = query.data();
       if (!dbUpgrades) return;
-      console.log('Loading upgrades from database:', dbUpgrades);
 
       const merged = defaultUpgrades.map((upgrade) => {
         const savedUpgrade = dbUpgrades.find((s: any) => s.id === upgrade.id);
@@ -35,6 +32,7 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
 
   protected abstract getCurrentCurrency(): number;
   protected abstract spendCurrency(amount: number): void;
+  protected abstract updateDatabase(): void;
 
   calculateCost(upgrade: T & { baseCost: number; costScaling: number }): number {
     return Math.floor(upgrade.baseCost * Math.pow(upgrade.costScaling, upgrade.currentLevel));
@@ -59,6 +57,8 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
     this.upgrades.update((upgrades) =>
       upgrades.map((u) => (u.id === upgradeID ? { ...u, currentLevel: u.currentLevel + 1 } : u))
     );
+
+    this.updateDatabase();
 
     return true;
   }

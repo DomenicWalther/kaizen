@@ -26,6 +26,7 @@ export class Character {
   });
 
   goldUpgrades = computed(() => {
+    console.log('Recomputing gold upgrades', this.goldUpgradeService.allUpgrades());
     return this.goldUpgradeService.allUpgrades().map((upgrade: any) => ({
       upgrade,
       currentCost: this.goldUpgradeService.calculateCost(upgrade),

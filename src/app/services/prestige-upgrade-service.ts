@@ -3,13 +3,15 @@ import { BaseUpgradeService } from './base-upgrade';
 import { Upgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 import { CharacterService } from './character-service';
 import { api } from '../../../convex/_generated/api';
-import { injectQuery } from 'convex-angular';
+import { injectMutation, injectQuery } from 'convex-angular';
 @Injectable({
   providedIn: 'root',
 })
 export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
   private readonly characterService = inject(CharacterService);
-
+  private readonly databaseUpdateMutation = injectMutation(
+    api.prestigeUpgrades.updatePrestigeUpgradeLevels
+  );
   constructor() {
     super();
     this.init(() => this.getPrestigeUpgradeDefinitions(), this.getUpgradesFromDatabase);
@@ -19,6 +21,16 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
     api.prestigeUpgrades.getPrestigeUpgrades,
     () => ({})
   );
+
+  protected override updateDatabase(): void {
+    const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
+      (upgrade) => ({
+        id: upgrade.id,
+        currentLevel: upgrade.currentLevel,
+      })
+    );
+    this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
+  }
 
   protected override getCurrentCurrency(): number {
     return this.characterService.character().prestigeCores;

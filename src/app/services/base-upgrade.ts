@@ -1,5 +1,7 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { UpgradeEffectType } from '../models/prestige.model';
+import { QueryResult } from 'convex-angular';
+import { DataModel, Doc } from '../../../convex/_generated/dataModel';
 
 export interface UpgradeSaveData {
   id: string;
@@ -11,34 +13,24 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
   protected upgrades = signal<T[]>([]);
   readonly allUpgrades = this.upgrades.asReadonly();
 
-  constructor(protected storageKey: string) {
-    effect(() => {
-      const saveData: UpgradeSaveData[] = this.upgrades().map((upgrade) => ({
-        id: upgrade.id,
-        currentLevel: upgrade.currentLevel,
-      }));
-      localStorage.setItem(this.storageKey, JSON.stringify(saveData));
-    });
-  }
-
-  protected init(getDefaultUpgrades: () => T[]) {
-    const saved = localStorage.getItem(this.storageKey);
+  protected init(getDefaultUpgrades: () => T[], query: any) {
     const defaultUpgrades = getDefaultUpgrades();
 
-    if (!saved) {
-      this.upgrades.set(defaultUpgrades);
-      return;
-    }
+    effect(() => {
+      const dbUpgrades = query.data();
+      if (!dbUpgrades) return;
+      console.log('Loading upgrades from database:', dbUpgrades);
 
-    const savedProgress: UpgradeSaveData[] = JSON.parse(saved);
-    const merged = defaultUpgrades.map((upgrade) => {
-      const savedUpgrade = savedProgress.find((s) => s.id === upgrade.id);
-      return {
-        ...upgrade,
-        currentLevel: savedUpgrade?.currentLevel ?? 0,
-      };
+      const merged = defaultUpgrades.map((upgrade) => {
+        const savedUpgrade = dbUpgrades.find((s: any) => s.id === upgrade.id);
+        return {
+          ...upgrade,
+          currentLevel: savedUpgrade?.currentLevel ?? 0,
+        };
+      });
+
+      this.upgrades.set(merged);
     });
-    this.upgrades.set(merged);
   }
 
   protected abstract getCurrentCurrency(): number;

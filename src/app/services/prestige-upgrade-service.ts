@@ -1,8 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, Signal } from '@angular/core';
 import { BaseUpgradeService } from './base-upgrade';
 import { Upgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 import { CharacterService } from './character-service';
-
+import { api } from '../../../convex/_generated/api';
+import { injectQuery } from 'convex-angular';
 @Injectable({
   providedIn: 'root',
 })
@@ -10,9 +11,14 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
   private readonly characterService = inject(CharacterService);
 
   constructor() {
-    super('prestigeUpgrades');
-    this.init(() => this.getPrestigeUpgradeDefinitions());
+    super();
+    this.init(() => this.getPrestigeUpgradeDefinitions(), this.getUpgradesFromDatabase);
   }
+
+  private getUpgradesFromDatabase = injectQuery(
+    api.prestigeUpgrades.getPrestigeUpgrades,
+    () => ({})
+  );
 
   protected override getCurrentCurrency(): number {
     return this.characterService.character().prestigeCores;

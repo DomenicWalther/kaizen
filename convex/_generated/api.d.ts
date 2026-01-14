@@ -8,7 +8,9 @@
  * @module
  */
 
-import type * as todo from "../todo.js";
+import type * as goldUpgrades from "../goldUpgrades.js";
+import type * as lib_auth from "../lib/auth.js";
+import type * as prestigeUpgrades from "../prestigeUpgrades.js";
 import type * as users from "../users.js";
 
 import type {
@@ -18,7 +20,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  todo: typeof todo;
+  goldUpgrades: typeof goldUpgrades;
+  "lib/auth": typeof lib_auth;
+  prestigeUpgrades: typeof prestigeUpgrades;
   users: typeof users;
 }>;
 

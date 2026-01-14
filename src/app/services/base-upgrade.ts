@@ -6,43 +6,38 @@ export interface UpgradeSaveData {
   currentLevel: number;
 }
 
+interface UpdateQuery {
+  data: () => { id: string; currentLevel: number }[] | undefined | null;
+}
 @Injectable()
-export abstract class BaseUpgradeService<T extends { id: string; currentLevel: number }> {
+export abstract class BaseUpgradeService<
+  T extends { id: string; currentLevel: number; effectType: UpgradeEffectType }
+> {
   protected upgrades = signal<T[]>([]);
   readonly allUpgrades = this.upgrades.asReadonly();
 
-  constructor(protected storageKey: string) {
-    effect(() => {
-      const saveData: UpgradeSaveData[] = this.upgrades().map((upgrade) => ({
-        id: upgrade.id,
-        currentLevel: upgrade.currentLevel,
-      }));
-      localStorage.setItem(this.storageKey, JSON.stringify(saveData));
-    });
-  }
-
-  protected init(getDefaultUpgrades: () => T[]) {
-    const saved = localStorage.getItem(this.storageKey);
+  protected init(getDefaultUpgrades: () => T[], query: UpdateQuery) {
     const defaultUpgrades = getDefaultUpgrades();
 
-    if (!saved) {
-      this.upgrades.set(defaultUpgrades);
-      return;
-    }
+    effect(() => {
+      const dbUpgrades = query.data();
+      if (!dbUpgrades) return;
 
-    const savedProgress: UpgradeSaveData[] = JSON.parse(saved);
-    const merged = defaultUpgrades.map((upgrade) => {
-      const savedUpgrade = savedProgress.find((s) => s.id === upgrade.id);
-      return {
-        ...upgrade,
-        currentLevel: savedUpgrade?.currentLevel ?? 0,
-      };
+      const merged = defaultUpgrades.map((upgrade) => {
+        const savedUpgrade = dbUpgrades.find((s: any) => s.id === upgrade.id);
+        return {
+          ...upgrade,
+          currentLevel: savedUpgrade?.currentLevel ?? 0,
+        };
+      });
+
+      this.upgrades.set(merged);
     });
-    this.upgrades.set(merged);
   }
 
   protected abstract getCurrentCurrency(): number;
   protected abstract spendCurrency(amount: number): void;
+  protected abstract updateDatabase(): void;
 
   calculateCost(upgrade: T & { baseCost: number; costScaling: number }): number {
     return Math.floor(upgrade.baseCost * Math.pow(upgrade.costScaling, upgrade.currentLevel));
@@ -68,6 +63,8 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
       upgrades.map((u) => (u.id === upgradeID ? { ...u, currentLevel: u.currentLevel + 1 } : u))
     );
 
+    this.updateDatabase();
+
     return true;
   }
 
@@ -77,13 +74,13 @@ export abstract class BaseUpgradeService<T extends { id: string; currentLevel: n
 
   getTotalEffect(effectType: UpgradeEffectType): number {
     return this.upgrades()
-      .filter((u: any) => u.effectType === effectType)
-      .reduce((total, upgrade: any) => {
+      .filter((u: T) => u.effectType === effectType)
+      .reduce((total, upgrade) => {
         return total + this.calculateEffect(upgrade);
       }, 0);
   }
 
-  protected calculateEffect(upgrade: any): number {
+  calculateEffect(upgrade: any): number {
     switch (upgrade.effectScaling) {
       case 'linear':
         return upgrade.effectValue * upgrade.currentLevel;

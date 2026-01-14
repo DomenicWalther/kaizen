@@ -21,7 +21,7 @@ export class Character {
     return this.prestigeUpgradeService.allUpgrades().map((upgrade) => ({
       upgrade,
       currentCost: this.prestigeUpgradeService.calculateCost(upgrade),
-      totalEffect: this.prestigeUpgradeService.getTotalEffect(upgrade.effectType),
+      totalEffect: this.prestigeUpgradeService.calculateEffect(upgrade),
     }));
   });
 
@@ -29,7 +29,7 @@ export class Character {
     return this.goldUpgradeService.allUpgrades().map((upgrade) => ({
       upgrade,
       currentCost: this.goldUpgradeService.calculateCost(upgrade),
-      totalEffect: this.goldUpgradeService.getTotalEffect(upgrade.effectType),
+      totalEffect: this.goldUpgradeService.calculateEffect(upgrade),
     }));
   });
 

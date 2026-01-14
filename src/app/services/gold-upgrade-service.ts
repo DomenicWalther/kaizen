@@ -2,6 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { BaseUpgradeService } from './base-upgrade';
 import { Upgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 import { CharacterService } from './character-service';
+import { api } from '../../../convex/_generated/api';
+import { injectMutation, injectQuery } from 'convex-angular';
 
 @Injectable({
   providedIn: 'root',
@@ -9,15 +11,27 @@ import { CharacterService } from './character-service';
 export class GoldUpgradeService extends BaseUpgradeService<Upgrade> {
   private characterService = inject(CharacterService);
 
+  private databaseUpdateMutation = injectMutation(api.goldUpgrades.updateGoldUpgradeLevels);
   constructor() {
-    super('goldUpgrades');
-    this.init(() => this.getGoldUpgradeDefinitions());
+    super();
+    this.init(() => this.getGoldUpgradeDefinitions(), this.getUpgradesFromDatabase);
   }
+
+  private getUpgradesFromDatabase = injectQuery(api.goldUpgrades.getGoldUpgrades, () => ({}));
 
   protected override getCurrentCurrency(): number {
     return this.characterService.character().gold;
   }
 
+  protected override updateDatabase(): void {
+    const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
+      (upgrade) => ({
+        id: upgrade.id,
+        currentLevel: upgrade.currentLevel,
+      })
+    );
+    this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
+  }
   protected override spendCurrency(amount: number) {
     this.characterService.spendGold(amount);
   }

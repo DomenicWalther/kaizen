@@ -78,7 +78,7 @@ export class CombatService {
   calculateEnemyHP() {
     const character = this.characterService.character();
     const baseHP = 100;
-    const stageMultiplier = 1.6;
+    const stageMultiplier = 1.5;
     const waveMultiplier = 0.05;
 
     const stagePower = Math.pow(stageMultiplier, character.currentStage - 1);

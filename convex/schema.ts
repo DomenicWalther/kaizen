@@ -11,11 +11,15 @@ export default defineSchema({
     id: v.string(),
     currentLevel: v.number(),
     userId: v.id('users'),
-  }).index('by_user', ['userId']),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_and_id', ['userId', 'id']),
 
   goldUpgrades: defineTable({
     id: v.string(),
     currentLevel: v.number(),
     userId: v.id('users'),
-  }).index('by_user', ['userId']),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_and_id', ['userId', 'id']),
 });

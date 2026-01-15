@@ -12,7 +12,7 @@ export class CombatService {
   prestigeUpgradeService = inject(PrestigeUpgradeService);
   goldUpgradeService = inject(GoldUpgradeService);
   isFighting = signal(false);
-  fightIntervalID: any = signal<number | undefined>(undefined);
+  private fightIntervalID: number | undefined;
 
   enemyHP = signal(this.calculateEnemyHP());
 

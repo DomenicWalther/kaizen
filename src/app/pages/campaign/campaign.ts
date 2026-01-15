@@ -31,15 +31,20 @@ export class Campaign {
   attackSpeed = computed(
     () => Math.floor((1000 / this.combatService.calculateAttackSpeed()) * 100) / 100
   );
-  toggleFight() {
-    this.combatService.startFighting();
-  }
 
   prestige() {
     const coresEarned = this.prestigeService.calculatePrestigeCores();
     if (coresEarned > 0) {
       this.prestigeService.prestige();
     }
+  }
+
+  startFight() {
+    this.combatService.startFighting();
+  }
+
+  stopFight() {
+    this.combatService.stopFighting();
   }
 
   skipStage20() {

@@ -12,7 +12,7 @@ export class CombatService {
   prestigeUpgradeService = inject(PrestigeUpgradeService);
   goldUpgradeService = inject(GoldUpgradeService);
   isFighting = signal(false);
-  fightIntervalID: any;
+  fightIntervalID: any = signal<number | undefined>(undefined);
 
   enemyHP = signal(this.calculateEnemyHP());
 
@@ -25,29 +25,24 @@ export class CombatService {
       clearTimeout(this.swiftAttackTimeoutID);
     }
     this.isSwiftAttacking.set(true);
-    if (this.isFighting()) {
-      this.startFighting();
-      this.startFighting();
-    }
     this.swiftAttackTimeoutID = setTimeout(() => {
       this.isSwiftAttacking.set(false);
       this.swiftAttackTimeoutID = undefined;
-      if (this.isFighting()) {
-        this.startFighting();
-        this.startFighting();
-      }
     }, this.SWIFT_ATTACK_DURATION);
   }
+
   startFighting() {
-    if (this.isFighting()) {
-      clearInterval(this.fightIntervalID);
-      this.isFighting.set(false);
-    } else {
-      this.fightIntervalID = setInterval(() => {
-        this.performAttack();
-      }, this.calculateAttackSpeed());
-      this.isFighting.set(true);
-    }
+    this.isFighting.set(true);
+    this.performAttack();
+    clearInterval(this.fightIntervalID);
+    this.fightIntervalID = setInterval(() => {
+      this.startFighting();
+    }, this.calculateAttackSpeed());
+  }
+
+  stopFighting() {
+    this.isFighting.set(false);
+    clearInterval(this.fightIntervalID);
   }
   handleEnemyDefeat() {
     this.characterService.modifyStat('gold', this.calculateGoldReward());

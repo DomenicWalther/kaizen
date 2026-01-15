@@ -30,10 +30,10 @@
     ></progress>
   </div>
   @if (combatService.isFighting()) {
-  <button class="p-5 bg-gray-500 text-white font-bold" (click)="toggleFight()">Stop Fight</button>
+  <button class="p-5 bg-gray-500 text-white font-bold" (click)="stopFight()">Stop Fight</button>
   } @else {
 
-  <button class="p-5 bg-blue-950 text-white font-bold" (click)="toggleFight()">Begin Fight</button>
+  <button class="p-5 bg-blue-950 text-white font-bold" (click)="startFight()">Begin Fight</button>
   }
   <button
     class="p-5 bg-yellow-600 text-white font-bold disabled:bg-gray-700"

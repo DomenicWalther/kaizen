@@ -41,7 +41,7 @@ export class CombatService {
 
   stopFighting() {
     this.isFighting.set(false);
-    clearInterval(this.fightIntervalID);
+    clearTimeout(this.fightIntervalID);
   }
   handleEnemyDefeat() {
     this.characterService.modifyStat('gold', this.calculateGoldReward());

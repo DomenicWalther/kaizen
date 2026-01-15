@@ -92,7 +92,8 @@ export class CombatService {
       (character.baseStrength +
         this.goldUpgradeService.getTotalEffect(UpgradeEffectType.FLAT_STAT_BOOST)) *
       character.strengthModifier *
-      character.prestigeMultipliers.strength;
+      character.prestigeMultipliers.strength *
+      character.prestigeLevel;
 
     const strengthBoost = this.prestigeUpgradeService.getTotalEffect(
       UpgradeEffectType.FLAT_STAT_BOOST

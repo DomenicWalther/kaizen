@@ -34,8 +34,7 @@ export class CombatService {
   startFighting() {
     this.isFighting.set(true);
     this.performAttack();
-    clearInterval(this.fightIntervalID);
-    this.fightIntervalID = setInterval(() => {
+    this.fightIntervalID = setTimeout(() => {
       this.startFighting();
     }, this.calculateAttackSpeed());
   }

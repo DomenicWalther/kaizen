@@ -32,7 +32,6 @@ export class CombatService {
   }
 
   startFighting() {
-    if (this.isFighting()) return;
     this.isFighting.set(true);
     this.performAttack();
     this.fightIntervalID = setTimeout(() => {

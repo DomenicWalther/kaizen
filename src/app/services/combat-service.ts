@@ -32,6 +32,7 @@ export class CombatService {
   }
 
   startFighting() {
+    if (this.isFighting()) return;
     this.isFighting.set(true);
     this.performAttack();
     this.fightIntervalID = setTimeout(() => {
@@ -126,6 +127,8 @@ export class CombatService {
 
     let gold = baseGold * waveBonusGold;
 
+    // #TODO: Add Upgrade for Gold "Critical Chance" increase
+    // seperate critical chance from the crit chance used in attacks -- might be upgraded differently later
     const critChance = 0.1;
     if (Math.random() < critChance) {
       gold *= 2;

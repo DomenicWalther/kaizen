@@ -32,12 +32,6 @@ export class CharacterService {
     });
   }
 
-  // private loadCharacter(): Character {
-  //   const defaultCharacter = this.returnDefaultCharacter();
-  //   const dbCharacter = this.getCharacterFromDatabase.data();
-  //   return { ...defaultCharacter, ...dbCharacter };
-  // }
-
   public updateDatabase(): void {
     const characterToSave = {
       id: this.character().id,

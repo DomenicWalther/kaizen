@@ -8,15 +8,22 @@ import { CharacterService } from './character-service';
 })
 export class GameStateService {
   constructor(
-    private goldUpgradeService: GoldUpgradeService,
-    private prestigeUpgradeService: PrestigeUpgradeService
-  ) // private characterService: CharacterService
-  {}
+    public goldUpgradeService: GoldUpgradeService,
+    public prestigeUpgradeService: PrestigeUpgradeService,
+    public characterService: CharacterService,
+  ) {}
 
   getState() {
     return {
       goldUpgrades: this.goldUpgradeService.allUpgrades(),
       prestigeUpgrades: this.prestigeUpgradeService.allUpgrades(),
+      character: this.characterService.character(),
     };
+  }
+
+  pushUpdatesToDatabase() {
+    this.goldUpgradeService.updateDatabase();
+    this.prestigeUpgradeService.updateDatabase();
+    this.characterService.updateDatabase();
   }
 }

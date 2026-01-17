@@ -10,7 +10,7 @@ import { injectMutation, injectQuery } from 'convex-angular';
 export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
   private readonly characterService = inject(CharacterService);
   private readonly databaseUpdateMutation = injectMutation(
-    api.prestigeUpgrades.updatePrestigeUpgradeLevels
+    api.prestigeUpgrades.updatePrestigeUpgradeLevels,
   );
   constructor() {
     super();
@@ -19,15 +19,15 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
 
   private getUpgradesFromDatabase = injectQuery(
     api.prestigeUpgrades.getPrestigeUpgrades,
-    () => ({})
+    () => ({}),
   );
 
-  protected override updateDatabase(): void {
+  public override updateDatabase(): void {
     const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
       (upgrade) => ({
         id: upgrade.id,
         currentLevel: upgrade.currentLevel,
-      })
+      }),
     );
     this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
   }

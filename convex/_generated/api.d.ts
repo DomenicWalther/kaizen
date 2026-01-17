@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as character from "../character.js";
 import type * as goldUpgrades from "../goldUpgrades.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as prestigeUpgrades from "../prestigeUpgrades.js";
@@ -20,6 +21,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  character: typeof character;
   goldUpgrades: typeof goldUpgrades;
   "lib/auth": typeof lib_auth;
   prestigeUpgrades: typeof prestigeUpgrades;

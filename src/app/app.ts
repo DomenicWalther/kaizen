@@ -9,12 +9,8 @@ import { AutoSaveService } from './services/autosave-service';
   imports: [RouterOutlet, Navbar],
   templateUrl: './app.html',
 })
-export class App implements OnInit, OnDestroy {
+export class App implements OnDestroy {
   constructor(private autoSaveService: AutoSaveService) {}
-
-  ngOnInit() {
-    this.autoSaveService.startAutoSave();
-  }
 
   ngOnDestroy() {
     this.autoSaveService.stopAutoSave();

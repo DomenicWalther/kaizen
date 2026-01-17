@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { GoldUpgradeService } from './gold-upgrade-service';
 import { PrestigeUpgradeService } from './prestige-upgrade-service';
 import { CharacterService } from './character-service';
+import { Character } from '../models/character.model';
+import { Upgrade } from '../models/prestige.model';
 
+export interface GameState {
+  goldUpgrades: Upgrade[];
+  prestigeUpgrades: Upgrade[];
+  character: Character;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +20,7 @@ export class GameStateService {
     public characterService: CharacterService,
   ) {}
 
-  getState() {
+  getState(): GameState {
     return {
       goldUpgrades: this.goldUpgradeService.allUpgrades(),
       prestigeUpgrades: this.prestigeUpgradeService.allUpgrades(),

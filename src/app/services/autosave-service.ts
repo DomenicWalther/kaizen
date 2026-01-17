@@ -1,10 +1,12 @@
 import { effect, Injectable } from '@angular/core';
 import { GameStateService } from './gamestate-service';
 import { Upgrade } from '../models/prestige.model';
+import { Character } from '../models/character.model';
 
 export interface GameState {
   goldUpgrades: Upgrade[];
   prestigeUpgrades: Upgrade[];
+  character: Character;
 }
 
 @Injectable({
@@ -40,7 +42,6 @@ export class AutoSaveService {
 
     if (JSON.stringify(currentGameState) !== JSON.stringify(this.lastSavedGameState)) {
       this.GameStateService.pushUpdatesToDatabase();
-      console.log('Pushing Updates to Database!');
 
       this.lastSavedGameState = currentGameState;
     }

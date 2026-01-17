@@ -21,10 +21,10 @@ export class CharacterService {
       if (this.hasLoadedFromDb()) {
         this.character.update((char) => ({
           ...char,
-          ...dbCharacter[0],
+          ...dbCharacter,
         }));
       } else {
-        const merged = { ...defaultCharacter, ...dbCharacter[0] };
+        const merged = { ...defaultCharacter, ...dbCharacter };
 
         this.character.set(merged);
         this.hasLoadedFromDb.set(true);

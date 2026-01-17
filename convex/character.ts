@@ -11,7 +11,7 @@ export const getCharacter = query({
     const character = await ctx.db
       .query('character')
       .withIndex('by_user', (q) => q.eq('userId', user._id))
-      .collect();
+      .unique();
 
     return character;
   },

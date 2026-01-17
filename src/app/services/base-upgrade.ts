@@ -11,15 +11,17 @@ interface UpdateQuery {
 }
 @Injectable()
 export abstract class BaseUpgradeService<
-  T extends { id: string; currentLevel: number; effectType: UpgradeEffectType }
+  T extends { id: string; currentLevel: number; effectType: UpgradeEffectType },
 > {
   protected upgrades = signal<T[]>([]);
   readonly allUpgrades = this.upgrades.asReadonly();
+  hasLoadedFromDb = signal(false);
 
   protected init(getDefaultUpgrades: () => T[], query: UpdateQuery) {
     const defaultUpgrades = getDefaultUpgrades();
 
     effect(() => {
+      if (this.hasLoadedFromDb()) return;
       const dbUpgrades = query.data();
       if (!dbUpgrades) return;
 
@@ -32,12 +34,13 @@ export abstract class BaseUpgradeService<
       });
 
       this.upgrades.set(merged);
+      this.hasLoadedFromDb.set(true);
     });
   }
 
   protected abstract getCurrentCurrency(): number;
   protected abstract spendCurrency(amount: number): void;
-  protected abstract updateDatabase(): void;
+  public abstract updateDatabase(): void;
 
   calculateCost(upgrade: T & { baseCost: number; costScaling: number }): number {
     return Math.floor(upgrade.baseCost * Math.pow(upgrade.costScaling, upgrade.currentLevel));
@@ -60,11 +63,8 @@ export abstract class BaseUpgradeService<
     const cost = this.calculateCost(upgrade);
     this.spendCurrency(cost);
     this.upgrades.update((upgrades) =>
-      upgrades.map((u) => (u.id === upgradeID ? { ...u, currentLevel: u.currentLevel + 1 } : u))
+      upgrades.map((u) => (u.id === upgradeID ? { ...u, currentLevel: u.currentLevel + 1 } : u)),
     );
-
-    this.updateDatabase();
-
     return true;
   }
 

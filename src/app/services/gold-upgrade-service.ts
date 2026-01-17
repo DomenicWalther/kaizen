@@ -23,12 +23,12 @@ export class GoldUpgradeService extends BaseUpgradeService<Upgrade> {
     return this.characterService.character().gold;
   }
 
-  protected override updateDatabase(): void {
+  public override updateDatabase(): void {
     const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
       (upgrade) => ({
         id: upgrade.id,
         currentLevel: upgrade.currentLevel,
-      })
+      }),
     );
     this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
   }

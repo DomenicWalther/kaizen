@@ -9,6 +9,7 @@
  */
 
 import type * as alchemyUpgrades from "../alchemyUpgrades.js";
+import type * as character from "../character.js";
 import type * as goldUpgrades from "../goldUpgrades.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as prestigeUpgrades from "../prestigeUpgrades.js";
@@ -22,6 +23,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   alchemyUpgrades: typeof alchemyUpgrades;
+  character: typeof character;
   goldUpgrades: typeof goldUpgrades;
   "lib/auth": typeof lib_auth;
   prestigeUpgrades: typeof prestigeUpgrades;

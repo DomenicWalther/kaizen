@@ -17,6 +17,11 @@ export interface Character {
     intelligence: number;
     endurance: number;
   };
+  alchemyDust: {
+    basic_dust: number;
+    improved_dust: number;
+    advanced_dust: number;
+  };
   prestigeCores: number;
 
   gold: number;

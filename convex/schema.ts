@@ -22,4 +22,12 @@ export default defineSchema({
   })
     .index('by_user', ['userId'])
     .index('by_user_and_id', ['userId', 'id']),
+
+  alchemyUpgrades: defineTable({
+    id: v.string(),
+    currentLevel: v.number(),
+    userId: v.id('users'),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_and_id', ['userId', 'id']),
 });

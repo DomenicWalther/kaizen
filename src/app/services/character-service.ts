@@ -37,6 +37,11 @@ export class CharacterService {
         intelligence: 1,
         endurance: 1,
       },
+      alchemyDust: {
+        basic_dust: this.character().alchemyDust.basic_dust || 0,
+        improved_dust: this.character().alchemyDust.improved_dust || 0,
+        advanced_dust: this.character().alchemyDust.advanced_dust || 0,
+      },
       prestigeCores: this.character().prestigeCores || 0,
       gold: this.character().gold || 0,
       currentStage: 1,
@@ -69,7 +74,7 @@ export class CharacterService {
       | 'prestigeLevel'
       | 'prestigeCores'
     >,
-    amount: number
+    amount: number,
   ) {
     const currentValue = this.character()[stat];
     const newValue = currentValue + amount;

@@ -22,9 +22,7 @@ export class Navbar implements AfterViewInit {
   }
 
   moveUnderline() {
-    console.log('Moving underline!');
     const active = this.nav.nativeElement.querySelector('.active-link');
-    console.log(active);
     if (!active) return;
 
     const rect = active.getBoundingClientRect();

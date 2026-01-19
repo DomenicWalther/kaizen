@@ -10,5 +10,5 @@ ul {
     opacity: 0.5;
     left: 0;
     width: 0;
-    transition: left 300ms ease, width 300ms ease;
+    transition: left 300ms ease, width 600ms ease;
 }

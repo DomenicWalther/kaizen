@@ -18,7 +18,7 @@ export class AlchemyService extends BaseUpgradeService<Upgrade> {
 
   private getUpgradesFromDatabase = injectQuery(api.alchemyUpgrades.getAlchemyUpgrades, () => ({}));
 
-  protected override updateDatabase(): void {
+  public override updateDatabase(): void {
     const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
       (upgrade) => ({
         id: upgrade.id,

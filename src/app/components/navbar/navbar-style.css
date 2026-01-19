@@ -1,0 +1,14 @@
+ul {
+    position: relative;
+}
+
+.nav-underline {
+    position: absolute;
+    bottom: -6px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+    left: 0;
+    width: 0;
+    transition: left 300ms ease, width 300ms ease;
+}

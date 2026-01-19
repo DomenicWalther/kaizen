@@ -1,24 +1,29 @@
 <header
-  class="flex gap-5 px-20 py-5 items-center bg-dark-bg text-main-cyan justify-between border-b-main-cyan border-b-2"
+  class="font-mono flex gap-5 px-20 py-5 items-center bg-dark-bg text-main-cyan justify-between border-b-main-cyan border-b-2"
 >
   <div>
-    <p>CORE_STRATE</p>
-    <p>STREAMS // ACTIVE_NODES</p>
+    <p class="font-display font-bold tracking-widest text-xl glow-cyan">CORE_STRATA</p>
+    <p class="opacity-50 glow-cyan segmented-text text-[0.6em]">STREAMS // ACTIVE_NODES</p>
   </div>
-  <ul class="flex gap-5">
-    <li routerLink="/dashboard" routerLinkActive="text-gray-200 font-bold">DASHBOARD</li>
-    <li routerLink="/character" routerLinkActive="scale-[1.5]">CHARACTER</li>
-    <li routerLink="/milestones" routerLinkActive="scale-[1.1] font-bold">MILESTONES</li>
-    <li
-      routerLink="/campaign"
-      routerLinkActive="border-b-2 border-b-main-cyan"
-      class="border-main-cyan"
-    >
-      CAMPAIGN
-    </li>
-  </ul>
-  <div>
-    <p>ENERGY_STREAM: 85,420</p>
-    <p>LVL_45_OPERATIVE</p>
+  <div class="relative">
+    <ul class="flex gap-5" #nav>
+      <li routerLink="/dashboard" routerLinkActive="active-link">
+        <span>DASHBOARD</span>
+      </li>
+      <li routerLink="/character" routerLinkActive="active-link">
+        <span>CHARACTER</span>
+      </li>
+      <li routerLink="/milestones" routerLinkActive="active-link">
+        <span>MILESTONES</span>
+      </li>
+      <li routerLink="/campaign" routerLinkActive="active-link">
+        <span>CAMPAIGN</span>
+      </li>
+    </ul>
+    <div class="nav-underline" #underline></div>
+  </div>
+  <div class="glow-cyan">
+    <p class="glow-cyan">ENERGY_STREAM: 85,420</p>
+    <p class="glow-cyan">LVL_45_OPERATIVE</p>
   </div>
 </header>

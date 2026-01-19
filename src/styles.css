@@ -35,9 +35,12 @@
 
 
 .glow-cyan {
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
 }
 
+.glow-amber {
+    text-shadow: 0 0 10px rgba(251, 255, 0, 0.7);
+}
 .segmented-text {
     @apply font-mono font-extralight tracking-[0.2em] uppercase;
 }

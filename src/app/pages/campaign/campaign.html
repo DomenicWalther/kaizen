@@ -1,4 +1,4 @@
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+<!-- <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
   <h2 class="text-4xl font-bold">Campaign</h2>
   <div class="mt-5">
     <ul class="flex gap-5">
@@ -53,4 +53,53 @@
   >
     Use Swift Attack Skill
   </button>
-</section>
+</section> -->
+<div class="h-full grid grid-rows-[1fr_auto]">
+  <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
+    <div class="border-r-grid-line border-r-2 pr-20 flex flex-col justify-between">
+      <div class="mt-20 glow-cyan text-2xl font-mono text-main-cyan flex flex-col">
+        <div class="mb-10">
+          <p class="glow-cyan text-2xl font-mono text-main-cyan">Hero Analytics</p>
+        </div>
+        <div class="flex flex-col gap-16">
+          <div class="flex flex-row justify-between items-center gap-5">
+            <p class="segmented-text text-main-cyan-muted text-sm">Attack Power</p>
+            <p>{{ attackDamage() }}</p>
+          </div>
+          <div class="flex flex-row justify-between items-center gap-5">
+            <p class="segmented-text text-main-cyan-muted text-sm">Attack Speed</p>
+            <p>{{ attackSpeed() }}/s</p>
+          </div>
+          <div class="flex flex-row justify-between items-center gap-5">
+            <p class="segmented-text text-main-cyan-muted text-sm">Multipliers</p>
+            <p>{{ character().prestigeLevel }} x {{ character().prestigeMultipliers.strength }}</p>
+          </div>
+          <div class="h-px w-full bg-grid-line"></div>
+
+          <div class="flex flex-row justify-between items-center gap-5 text-main-Amber glow-amber">
+            <p class="segmented-text text-sm">Critical Chance</p>
+            <p>24%</p>
+          </div>
+          <div class="flex flex-row justify-between items-center gap-5 text-main-Amber glow-amber">
+            <p class="segmented-text text-sm">Critical Damage</p>
+            <p>2.5x</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col text-2xl gap-20 text-main-cyan-muted font-mono mb-10">
+        <p>Vault</p>
+        <div>
+          <p>Gold</p>
+          <p class="text-main-cyan text-4xl">{{ character().gold }}</p>
+        </div>
+        <div>
+          <p>Kaizen Cores</p>
+          <p class="text-main-cyan text-4xl">{{ character().prestigeCores }}</p>
+        </div>
+      </div>
+    </div>
+    <div>Test</div>
+    <div>Test</div>
+  </section>
+  <footer class="text-white font-bold">INITIATE ASCENSION</footer>
+</div>

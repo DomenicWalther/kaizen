@@ -1,13 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
-import { NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage, NgStyle } from '@angular/common';
 import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, NgStyle],
   templateUrl: './campaign.html',
 })
 export class Campaign {
@@ -25,11 +25,11 @@ export class Campaign {
   damagePerSecond = computed(
     () =>
       Math.floor(this.attackDamage() * (1000 / this.combatService.calculateAttackSpeed()) * 100) /
-      100
+      100,
   );
 
   attackSpeed = computed(
-    () => Math.floor((1000 / this.combatService.calculateAttackSpeed()) * 100) / 100
+    () => Math.floor((1000 / this.combatService.calculateAttackSpeed()) * 100) / 100,
   );
 
   prestige() {
@@ -56,7 +56,7 @@ export class Campaign {
       Character,
       'level' | 'baseStrength' | 'baseIntelligence' | 'baseEndurance' | 'gold'
     >,
-    amount: number
+    amount: number,
   ) {
     this.characterService.modifyStat(stat, amount);
   }

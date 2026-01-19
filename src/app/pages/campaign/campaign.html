@@ -104,20 +104,59 @@
     >
       <div class="flex justify-around mt-20 w-full">
         <div>
-          <p class="text-main-cyan-muted text-sm">SECTOR_7-X_OHSIDIAN</p>
+          <p class="text-main-cyan-muted text-sm">
+            SECTOR_{{ character().currentStage }}-X_OHSIDIAN
+          </p>
           <p class="text-6xl font-impact">VOID STALKER</p>
-          <div>HPBAR</div>
+          <div>
+            <p>
+              {{ combatService.enemyHP() }}<span class="text-main-cyan-muted"> / </span
+              >{{ combatService.calculateEnemyHP() }} HP
+            </p>
+          </div>
         </div>
         <div class="flex flex-col gap-4 text-end relative">
           <p class="text-main-cyan-muted text-sm tracking-widest">WAVE PROGRESS</p>
           <p class="text-5xl">
             {{ character().currentWave }}<span class="text-main-cyan-muted">/</span>10
           </p>
-          <div class="h-0.5 min-w-80 bottom-0 bg-main-cyan"></div>
+          <div class="flex">
+            <div
+              class="h-0.5 bottom-0 bg-main-cyan"
+              [ngStyle]="{ width: character().currentWave * 10 + '%' }"
+            ></div>
+
+            <div
+              class="h-0.5 bottom-0 bg-main-cyan-muted"
+              [ngStyle]="{ width: 100 - character().currentWave * 10 + '%' }"
+            ></div>
+          </div>
         </div>
       </div>
     </div>
     <div>Test</div>
   </section>
-  <footer class="text-white font-bold">INITIATE ASCENSION</footer>
+  <footer
+    class="text-main-cyan font-mono h-[10vh] px-20 border-t border-t-grid-line flex items-center"
+  >
+    <div>
+      <p class="text-main-cyan-muted text-sm mb-2">AUTOMATION</p>
+
+      @if (combatService.isFighting()) {
+        <button
+          class="bg-main-cyan-muted text-main-cyan border-main-cyan border-2"
+          (click)="stopFight()"
+        >
+          AUTO_FIGHT: ON
+        </button>
+      } @else {
+        <button
+          class="bg-main-cyan-muted text-main-cyan border-main-cyan border-2 opacity-50 px-12 py-4"
+          (click)="startFight()"
+        >
+          AUTO_FIGHT: OFF
+        </button>
+      }
+    </div>
+  </footer>
 </div>

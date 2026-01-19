@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@theme {
+    --color-dark-bg: #05070a;
+    --color-main-cyan: #00f0ff;
+    --color-main-Amber: #ffb800;
+
+}

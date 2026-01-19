@@ -27,6 +27,7 @@
     --color-main-cyan: #00f0ff;
     --color-main-Amber: #ffb800;
     --color-main-cyan-muted: rgba(0, 240, 255, 0.4);
+    --color-grid-line: rgba(0,240,255,0.2);
     --font-mono: "JetBrains Mono", "monospace";
     --font-display: "Syncopate", "sans-serif";
     --font-impact: "Inter", "sans-serif";

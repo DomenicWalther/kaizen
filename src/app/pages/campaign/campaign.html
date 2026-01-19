@@ -58,7 +58,8 @@
   <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
     <div class="border-r-grid-line border-r-2 pr-20 flex flex-col justify-between">
       <div class="mt-20 glow-cyan text-2xl font-mono text-main-cyan flex flex-col">
-        <div class="mb-10">
+        <div class="mb-10 flex gap-5 items-center">
+          <div class="h-2 aspect-square bg-main-cyan"></div>
           <p class="glow-cyan text-2xl font-mono text-main-cyan">Hero Analytics</p>
         </div>
         <div class="flex flex-col gap-16">
@@ -98,7 +99,24 @@
         </div>
       </div>
     </div>
-    <div>Test</div>
+    <div
+      class="flex justify-between text-main-cyan font-mono border-r-2 glow-cyan border-r-grid-line px-20"
+    >
+      <div class="flex justify-around mt-20 w-full">
+        <div>
+          <p class="text-main-cyan-muted text-sm">SECTOR_7-X_OHSIDIAN</p>
+          <p class="text-6xl font-impact">VOID STALKER</p>
+          <div>HPBAR</div>
+        </div>
+        <div class="flex flex-col gap-4 text-end relative">
+          <p class="text-main-cyan-muted text-sm tracking-widest">WAVE PROGRESS</p>
+          <p class="text-5xl">
+            {{ character().currentWave }}<span class="text-main-cyan-muted">/</span>10
+          </p>
+          <div class="h-0.5 min-w-80 bottom-0 bg-main-cyan"></div>
+        </div>
+      </div>
+    </div>
     <div>Test</div>
   </section>
   <footer class="text-white font-bold">INITIATE ASCENSION</footer>

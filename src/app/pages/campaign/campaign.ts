@@ -6,10 +6,11 @@ import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
 import { BigDecimalFormat } from '../../shared/pipes/BigDecimalFormatthing.pipe';
 import { Sidebar } from './components/sidebar/sidebar';
+import { HPBar } from './components/hp-bar/hp-bar';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar],
+  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar, HPBar],
   templateUrl: './campaign.html',
 })
 export class Campaign {

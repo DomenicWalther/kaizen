@@ -17,7 +17,7 @@ export class AutoSaveService {
   private lastSavedGameState: GameState | undefined;
   private autoSaveHasStarted = false;
 
-  AUTO_SAVE_INTERVAL = 300000; // 5 minutes #TODO: FOR DEBUGGING 10S RIGHT NOW, CHANGE BACK TO 5 MIN
+  AUTO_SAVE_INTERVAL = 10000; // 5 minutes #TODO: FOR DEBUGGING 10S RIGHT NOW, CHANGE BACK TO 5 MIN
 
   constructor(private GameStateService: GameStateService) {
     effect(() => {

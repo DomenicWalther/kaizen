@@ -46,7 +46,6 @@ export class CharacterService {
   }
 
   resetCharacter() {
-    // Preserve prestige-related values when resetting
     const currentChar = this.character();
 
     this.character.set({

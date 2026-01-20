@@ -20,7 +20,7 @@ export class PrestigeService {
   calculatePrestigeCores() {
     if (this.characterService.character().currentStage < 20) return 0;
     const prestigeCoreGain = Math.floor(
-      4 * Math.log10(this.characterService.character().currentStage)
+      4 * Math.log10(this.characterService.character().currentStage),
     );
     const multiplier =
       1 + this.prestigeUgpradeService.getTotalEffect(UpgradeEffectType.MULTIPLIER_BOOST);

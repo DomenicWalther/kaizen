@@ -34,6 +34,7 @@
     --color-main-Amber: #ffb800;
     --color-main-cyan-muted: rgba(0, 240, 255, 0.4);
     --color-grid-line: rgba(0,240,255,0.2);
+    --color-electric-cyan: #00f0ff;
     --font-mono: "JetBrains Mono", "monospace";
     --font-display: "Syncopate", "sans-serif";
     --font-impact: "Inter", "sans-serif";
@@ -49,4 +50,12 @@
 }
 .segmented-text {
     @apply font-mono font-extralight tracking-[0.2em] uppercase;
+}
+
+.hp-segment {
+    clip-path: polygon(2px 0, 100% 0, calc(100% - 2px) 100%, 0 100%);
+}
+
+.chamfer-br {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
 }

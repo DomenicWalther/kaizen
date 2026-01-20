@@ -1,0 +1,17 @@
+<div class="relative h-3 w-full border border-electric-cyan/20 p-0.5 bg-grid-line/40">
+  <div class="flex h-full w-full gap-0.5">
+    <div class="h-full w-4 bg-main-Amber shadow-[0_0_8px_rgba(255,184,0,0.6)] hp-segment"></div>
+    <div class="h-full flex-1 flex gap-px">
+      @for (segment of segments(); track $index) {
+        <div
+          class="h-full w-2"
+          [class.bg-electric-cyan]="segment.isActive"
+          [class.shadow-[0_0_8px_#00f0ff]]="segment.isActive"
+          [class.bg-electric-cyan/10]="!segment.isActive"
+          [class.border]="!segment.isActive"
+          [class.border-electricCyan/20]="!segment.isActive"
+        ></div>
+      }
+    </div>
+  </div>
+</div>

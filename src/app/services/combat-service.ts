@@ -15,6 +15,7 @@ export class CombatService {
   private fightIntervalID: number | undefined;
 
   enemyHP = signal(this.calculateEnemyHP());
+  enemyMaxHP = signal(this.calculateEnemyHP());
 
   isSwiftAttacking = signal(false);
   swiftAttackTimeoutID: number | undefined;
@@ -47,6 +48,7 @@ export class CombatService {
     this.characterService.modifyStat('gold', this.calculateGoldReward());
     this.characterService.advanceWave();
     this.enemyHP.set(this.calculateEnemyHP());
+    this.enemyMaxHP.set(this.enemyHP());
   }
 
   performAttack() {
@@ -79,9 +81,8 @@ export class CombatService {
     const wavePower = Math.pow(1 + waveMultiplier, character.currentWave - 1);
     let enemyHP = Math.floor(baseHP * stagePower * wavePower);
     const healthReduction = this.prestigeUpgradeService.getTotalEffect(
-      UpgradeEffectType.ENEMY_HEALTH_REDUCTION
+      UpgradeEffectType.ENEMY_HEALTH_REDUCTION,
     );
-
     enemyHP = Math.floor(enemyHP * (1 - healthReduction));
     return enemyHP;
   }
@@ -96,12 +97,12 @@ export class CombatService {
       character.prestigeLevel;
 
     const strengthBoost = this.prestigeUpgradeService.getTotalEffect(
-      UpgradeEffectType.FLAT_STAT_BOOST
+      UpgradeEffectType.FLAT_STAT_BOOST,
     );
     damage *= 1 + strengthBoost;
 
     const dpsPerCore = this.prestigeUpgradeService.getTotalEffect(
-      UpgradeEffectType.DYNAMIC_PER_CORE
+      UpgradeEffectType.DYNAMIC_PER_CORE,
     );
     const unusedCores = character.prestigeCores;
     damage *= 1 + dpsPerCore * unusedCores;
@@ -112,11 +113,11 @@ export class CombatService {
     const BASE_ATTACK_SPEED = 1000;
     const SWIFT_ATTACK_SKILL_BOOST = 0.5;
     const attackSpeedBoost = this.prestigeUpgradeService.getTotalEffect(
-      UpgradeEffectType.ATTACK_SPEED
+      UpgradeEffectType.ATTACK_SPEED,
     );
     const swiftAttackSkill = this.isSwiftAttacking() ? SWIFT_ATTACK_SKILL_BOOST : 1;
     const finalAttackSpeed = Math.floor(
-      BASE_ATTACK_SPEED * (1 - attackSpeedBoost) * swiftAttackSkill
+      BASE_ATTACK_SPEED * (1 - attackSpeedBoost) * swiftAttackSkill,
     );
     return finalAttackSpeed;
   }

@@ -5,10 +5,11 @@ import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
 import { BigDecimalFormat } from '../../shared/pipes/BigDecimalFormatthing.pipe';
+import { Sidebar } from './components/sidebar/sidebar';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat],
+  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar],
   templateUrl: './campaign.html',
 })
 export class Campaign {
@@ -40,12 +41,14 @@ export class Campaign {
     }
   }
 
-  startFight() {
-    this.combatService.startFighting();
-  }
-
-  stopFight() {
-    this.combatService.stopFighting();
+  toggleFight() {
+    if (this.isFighting()) {
+      this.isFighting.set(false);
+      this.combatService.stopFighting();
+    } else {
+      this.isFighting.set(true);
+      this.combatService.startFighting();
+    }
   }
 
   skipStage20() {

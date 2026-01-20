@@ -56,49 +56,12 @@
 </section> -->
 <div class="h-full grid grid-rows-[1fr_auto]">
   <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
-    <div class="border-r-grid-line border-r-2 pr-20 flex flex-col justify-between">
-      <div class="mt-20 glow-cyan text-2xl font-mono text-main-cyan flex flex-col">
-        <div class="mb-10 flex gap-5 items-center">
-          <div class="h-2 aspect-square bg-main-cyan"></div>
-          <p class="glow-cyan text-2xl font-mono text-main-cyan">Hero Analytics</p>
-        </div>
-        <div class="flex flex-col gap-16">
-          <div class="flex flex-row justify-between items-center gap-5">
-            <p class="segmented-text text-main-cyan-muted text-sm">Attack Power</p>
-            <p>{{ attackDamage() | BigDecimalFormat }}</p>
-          </div>
-          <div class="flex flex-row justify-between items-center gap-5">
-            <p class="segmented-text text-main-cyan-muted text-sm">Attack Speed</p>
-            <p>{{ attackSpeed() }}/s</p>
-          </div>
-          <div class="flex flex-row justify-between items-center gap-5">
-            <p class="segmented-text text-main-cyan-muted text-sm">Multipliers</p>
-            <p>{{ character().prestigeLevel }} x {{ character().prestigeMultipliers.strength }}</p>
-          </div>
-          <div class="h-px w-full bg-grid-line"></div>
-
-          <div class="flex flex-row justify-between items-center gap-5 text-main-Amber glow-amber">
-            <p class="segmented-text text-sm">Critical Chance</p>
-            <p>24%</p>
-          </div>
-          <div class="flex flex-row justify-between items-center gap-5 text-main-Amber glow-amber">
-            <p class="segmented-text text-sm">Critical Damage</p>
-            <p>2.5x</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col text-2xl gap-20 text-main-cyan-muted font-mono mb-10">
-        <p>Vault</p>
-        <div>
-          <p>Gold</p>
-          <p class="text-main-cyan text-4xl">{{ character().gold | BigDecimalFormat }}</p>
-        </div>
-        <div>
-          <p>Kaizen Cores</p>
-          <p class="text-main-cyan text-4xl">{{ character().prestigeCores | BigDecimalFormat }}</p>
-        </div>
-      </div>
-    </div>
+    <app-sidebar
+      [character]="character()"
+      [attackDamage]="attackDamage()"
+      [attackSpeed]="attackSpeed()"
+      class="h-full"
+    />
     <div
       class="flex justify-between text-main-cyan font-mono border-r-2 glow-cyan border-r-grid-line px-20"
     >
@@ -142,22 +105,16 @@
   >
     <div>
       <p class="text-main-cyan-muted text-sm mb-2">AUTOMATION</p>
-
-      @if (combatService.isFighting()) {
-        <button
-          class="bg-main-cyan-muted text-main-cyan border-main-cyan border-2 opacity-50 px-12 py-4"
-          (click)="stopFight()"
-        >
+      <button
+        class="bg-main-cyan-muted/20 text-main-cyan border-main-cyan/50 glow-cyan border-2 px-12 py-4 cursor-pointer"
+        (click)="toggleFight()"
+      >
+        @if (combatService.isFighting()) {
           AUTO_FIGHT: ON
-        </button>
-      } @else {
-        <button
-          class="bg-main-cyan-muted text-main-cyan border-main-cyan border-2 opacity-50 px-12 py-4"
-          (click)="startFight()"
-        >
+        } @else {
           AUTO_FIGHT: OFF
-        </button>
-      }
+        }
+      </button>
     </div>
   </footer>
 </div>

@@ -4,10 +4,11 @@ import { NgOptimizedImage, NgStyle } from '@angular/common';
 import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
+import { BigDecimalFormat } from '../../shared/pipes/BigDecimalFormatthing.pipe';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage, NgStyle],
+  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat],
   templateUrl: './campaign.html',
 })
 export class Campaign {

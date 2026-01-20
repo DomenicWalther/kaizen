@@ -65,7 +65,7 @@
         <div class="flex flex-col gap-16">
           <div class="flex flex-row justify-between items-center gap-5">
             <p class="segmented-text text-main-cyan-muted text-sm">Attack Power</p>
-            <p>{{ attackDamage() }}</p>
+            <p>{{ attackDamage() | BigDecimalFormat }}</p>
           </div>
           <div class="flex flex-row justify-between items-center gap-5">
             <p class="segmented-text text-main-cyan-muted text-sm">Attack Speed</p>
@@ -91,11 +91,11 @@
         <p>Vault</p>
         <div>
           <p>Gold</p>
-          <p class="text-main-cyan text-4xl">{{ character().gold }}</p>
+          <p class="text-main-cyan text-4xl">{{ character().gold | BigDecimalFormat }}</p>
         </div>
         <div>
           <p>Kaizen Cores</p>
-          <p class="text-main-cyan text-4xl">{{ character().prestigeCores }}</p>
+          <p class="text-main-cyan text-4xl">{{ character().prestigeCores | BigDecimalFormat }}</p>
         </div>
       </div>
     </div>
@@ -110,8 +110,9 @@
           <p class="text-6xl font-impact">VOID STALKER</p>
           <div>
             <p>
-              {{ combatService.enemyHP() }}<span class="text-main-cyan-muted"> / </span
-              >{{ combatService.calculateEnemyHP() }} HP
+              {{ combatService.enemyHP() | BigDecimalFormat
+              }}<span class="text-main-cyan-muted"> / </span
+              >{{ combatService.calculateEnemyHP() | BigDecimalFormat }} HP
             </p>
           </div>
         </div>
@@ -144,7 +145,7 @@
 
       @if (combatService.isFighting()) {
         <button
-          class="bg-main-cyan-muted text-main-cyan border-main-cyan border-2"
+          class="bg-main-cyan-muted text-main-cyan border-main-cyan border-2 opacity-50 px-12 py-4"
           (click)="stopFight()"
         >
           AUTO_FIGHT: ON

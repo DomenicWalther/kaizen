@@ -1,22 +1,18 @@
 <div class="border-r-grid-line border-r-2 pr-20 flex flex-col justify-between h-full">
-  <div class="mt-20 glow-cyan text-2xl font-mono text-main-cyan flex flex-col">
+  <div class="mt-10 glow-cyan text-2xl font-mono text-main-cyan flex flex-col">
     <div class="mb-10 flex gap-5 items-center">
       <div class="h-2 aspect-square bg-main-cyan"></div>
       <p class="glow-cyan text-2xl font-mono text-main-cyan">Hero Analytics</p>
     </div>
     <div class="flex flex-col gap-16">
-      <div class="flex flex-row justify-between items-center gap-5">
-        <p class="segmented-text text-main-cyan-muted text-sm">Attack Power</p>
-        <p>{{ attackDamage() | BigDecimalFormat }}</p>
-      </div>
-      <div class="flex flex-row justify-between items-center gap-5">
-        <p class="segmented-text text-main-cyan-muted text-sm">Attack Speed</p>
-        <p>{{ attackSpeed() }}/s</p>
-      </div>
-      <div class="flex flex-row justify-between items-center gap-5">
-        <p class="segmented-text text-main-cyan-muted text-sm">Multipliers</p>
-        <p>{{ character().prestigeLevel }} x {{ character().prestigeMultipliers.strength }}</p>
-      </div>
+      <app-label MAIN_LABEL="Attack Power" [SECONDARY_LABEL]="attackDamage() | BigDecimalFormat" />
+      <app-label MAIN_LABEL="Attack Speed" SECONDARY_LABEL="{{ attackSpeed().toString() }}/s" />
+      <app-label
+        MAIN_LABEL="Multipliers"
+        SECONDARY_LABEL="{{ character().prestigeLevel }} x {{
+          character().prestigeMultipliers.strength
+        }}"
+      />
       <div class="h-px w-full bg-grid-line"></div>
 
       <div class="flex flex-row justify-between items-center gap-5 text-main-Amber glow-amber">

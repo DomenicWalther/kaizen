@@ -45,7 +45,7 @@
     <div>Test</div>
   </section>
   <footer
-    class="text-main-cyan font-mono h-[10vh] px-20 border-t border-t-grid-line flex items-center"
+    class="text-main-cyan font-mono h-[10vh] px-20 border-t border-t-grid-line flex items-center justify-between"
   >
     <div>
       <p class="text-main-cyan-muted text-sm mb-2">AUTOMATION</p>
@@ -58,6 +58,15 @@
         } @else {
           AUTO_FIGHT: OFF
         }
+      </button>
+    </div>
+    <div>
+      <button
+        type="button"
+        class="text-black font-bold bg-main-Amber glow-amber px-20 py-4 text-2xl font-mono tracking-widest"
+        (click)="prestige()"
+      >
+        INITIATE ASCENSION
       </button>
     </div>
   </footer>

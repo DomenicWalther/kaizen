@@ -1,5 +1,9 @@
 <div class="h-full grid grid-rows-[1fr_auto]">
-  <app-modal #ascensionModal></app-modal>
+  <app-modal
+    #ascensionModal
+    [coreLabel]="prestigeService.calculatePrestigeCores()"
+    (triggerCallback)="prestige()"
+  ></app-modal>
   <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
     <app-sidebar
       [character]="character()"
@@ -69,15 +73,12 @@
       <app-skillbutton (skillTriggered)="combatService.useSwiftAttackSkill()">
         SWIFT <br />STRIKE
       </app-skillbutton>
-      <app-skillbutton (skillTriggered)="ascensionModal.toggleModal()">
-        Open Ascension Modal
-      </app-skillbutton>
     </div>
     <div>
       <button
         type="button"
         class="text-black font-bold bg-main-Amber px-20 py-4 text-2xl font-mono tracking-widest shadow-[0_0_8px_rgba(255,184,0,0.6)]"
-        (click)="prestige()"
+        (click)="ascensionModal.toggleModal()"
       >
         INITIATE ASCENSION
       </button>

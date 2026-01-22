@@ -7,10 +7,11 @@ import { PrestigeService } from '../../services/prestige-service';
 import { BigDecimalFormat } from '../../shared/pipes/BigDecimalFormatthing.pipe';
 import { Sidebar } from './components/sidebar/sidebar';
 import { HPBar } from './components/hp-bar/hp-bar';
+import { Skillbutton } from './skillbutton/skillbutton';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar, HPBar],
+  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton],
   templateUrl: './campaign.html',
 })
 export class Campaign {

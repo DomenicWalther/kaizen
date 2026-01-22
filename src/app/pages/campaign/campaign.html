@@ -65,14 +65,9 @@
       </button>
     </div>
     <div>
-      <button
-        type="button"
-        (click)="combatService.useSwiftAttackSkill()"
-        class="border border-main-cyan/50 bg-main-cyan-muted/20 aspect-square px-5 py-2 flex items-center justify-center cursor-pointer"
-      >
-        SWIFT<br />
-        STRIKE
-      </button>
+      <app-skillbutton label="Swift Strike" (skillTriggered)="combatService.useSwiftAttackSkill()">
+        SWIFT <br />STRIKE
+      </app-skillbutton>
     </div>
     <div>
       <button

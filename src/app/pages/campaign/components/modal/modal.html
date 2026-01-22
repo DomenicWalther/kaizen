@@ -2,6 +2,8 @@
   <div
     (click)="toggleModal()"
     class="fixed inset-0 bg-none flex z-1000 items-center justify-center"
+    animate.enter="modal-enter"
+    animate.leave="modal-leave"
   >
     <section
       class="h-1/2 w-4/5 p-20 backdrop-blur-md bg-dark-bg/80 border-2 border-main-cyan absolute z-10 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col text-center justify-between py-40 text-white"

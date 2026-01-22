@@ -1,0 +1,21 @@
+
+.modal-enter {
+    animation: slideUp 300ms ease-out;
+}
+
+@keyframes slideUp{
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-leave {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    transition: opacity 200ms ease-in, transform 200ms ease-in;
+}

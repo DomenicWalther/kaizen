@@ -4,7 +4,7 @@ import { Component, input, model, output } from '@angular/core';
   selector: 'app-modal',
   imports: [],
   templateUrl: './modal.html',
-  styles: ``,
+  styleUrl: './styles.css',
 })
 export class Modal {
   isOpen = model<boolean>(false);

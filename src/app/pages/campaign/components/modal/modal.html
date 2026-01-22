@@ -1,0 +1,32 @@
+@if (isOpen()) {
+  <div
+    (click)="toggleModal()"
+    class="fixed inset-0 bg-none flex z-1000 items-center justify-center"
+  >
+    <section
+      class="h-1/2 w-4/5 p-20 backdrop-blur-md bg-dark-bg/80 border-2 border-main-cyan absolute z-10 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col text-center justify-between py-40 text-white"
+      (click)="$event.stopPropagation()"
+    >
+      <p class="font-bold text-3xl">Do you really want to Ascend?</p>
+      <p class="text-xl">
+        On Prestige you will Gain <br /><span class="text-main-Amber text-3xl"
+          >+52445 Kaizen Cores</span
+        >
+      </p>
+      <div class="flex gap-5">
+        <button
+          type="button"
+          class="text-black font-bold bg-main-Amber px-20 py-4 text-2xl font-mono tracking-widest shadow-[0_0_8px_rgba(255,184,0,0.6)]"
+        >
+          INITIATE ASCENSION
+        </button>
+        <button
+          eype="button"
+          class="text-white font-bold bg-red-700 px-20 py-4 text-2xl font-mono tracking-widest shadow-[0_0_8px_rgba(255,0,0,0.6)]"
+        >
+          Cancel
+        </button>
+      </div>
+    </section>
+  </div>
+}

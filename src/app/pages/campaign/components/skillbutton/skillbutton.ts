@@ -8,7 +8,6 @@ import { Component, input, output } from '@angular/core';
 })
 export class Skillbutton {
   skillTriggered = output<void>();
-  label = input.required<String>();
 
   onButtonClick() {
     this.skillTriggered.emit();

@@ -1,4 +1,5 @@
 <div class="h-full grid grid-rows-[1fr_auto]">
+  <app-modal #ascensionModal></app-modal>
   <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
     <app-sidebar
       [character]="character()"
@@ -65,8 +66,11 @@
       </button>
     </div>
     <div>
-      <app-skillbutton label="Swift Strike" (skillTriggered)="combatService.useSwiftAttackSkill()">
+      <app-skillbutton (skillTriggered)="combatService.useSwiftAttackSkill()">
         SWIFT <br />STRIKE
+      </app-skillbutton>
+      <app-skillbutton (skillTriggered)="ascensionModal.toggleModal()">
+        Open Ascension Modal
       </app-skillbutton>
     </div>
     <div>

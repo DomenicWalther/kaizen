@@ -3,11 +3,12 @@ import { BaseUpgradeService } from './base-upgrade';
 import { Upgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 import { injectMutation, injectQuery } from 'convex-angular';
 import { api } from '../../../convex/_generated/api';
+import { AlchemyDust } from '../models/character.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AlchemyService extends BaseUpgradeService<Upgrade> {
+export class AlchemyService {
   private readonly databaseUpdateMutation = injectMutation(
     api.alchemyUpgrades.updateAlchemyUpgradeLevels,
   );
@@ -28,12 +29,16 @@ export class AlchemyService extends BaseUpgradeService<Upgrade> {
     this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
   }
 
-  protected override getCurrentCurrency(): number {
-    return 0;
+  protected override getCurrentCurrency(): AlchemyDust {
+    return {
+      basic_dust: 0,
+      advanced_dust: 0,
+      improved_dust: 0,
+    };
   }
 
-  protected override spendCurrency(amount: number): void {
-    return;
+  protected override spendCurrency(amount: number, cost: AlchemyDust): boolean {
+    return true;
   }
 
   private getAlchemyUpgradeDefinitions(): Upgrade[] {

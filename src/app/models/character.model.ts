@@ -1,3 +1,9 @@
+export interface AlchemyDust {
+  basic_dust: number;
+  improved_dust: number;
+  advanced_dust: number;
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -17,11 +23,7 @@ export interface Character {
     intelligence: number;
     endurance: number;
   };
-  alchemyDust: {
-    basic_dust: number;
-    improved_dust: number;
-    advanced_dust: number;
-  };
+  alchemyDust: AlchemyDust;
   prestigeCores: number;
 
   gold: number;

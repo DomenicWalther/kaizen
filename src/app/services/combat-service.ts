@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { CharacterService } from './character-service';
 import { UpgradeEffectType } from '../models/prestige.model';
 import { PrestigeUpgradeService } from './prestige-upgrade-service';
@@ -14,8 +14,31 @@ export class CombatService {
   isFighting = signal(false);
   private fightIntervalID: number | undefined;
 
-  enemyHP = signal(this.calculateEnemyHP());
-  enemyMaxHP = signal(this.calculateEnemyHP());
+  enemyHP = signal(0);
+  enemyMaxHP = computed(() => {
+    const character = this.characterService.character();
+    const baseHP = 100;
+    const stageMultiplier = 1.5;
+    const waveMultiplier = 0.05;
+
+    const stagePower = Math.pow(stageMultiplier, character.currentStage - 1);
+    const wavePower = Math.pow(1 + waveMultiplier, character.currentWave - 1);
+    let maxHP = Math.floor(baseHP * stagePower * wavePower);
+    const healthReduction = this.prestigeUpgradeService.getTotalEffect(
+      UpgradeEffectType.ENEMY_HEALTH_REDUCTION,
+    );
+    maxHP = Math.floor(maxHP * (1 - healthReduction));
+    return maxHP;
+  });
+
+  constructor() {
+    effect(() => {
+      const character = this.characterService.character();
+      if (this.characterService.hasLoadedFromDb()) {
+        this.enemyHP.set(this.enemyMaxHP());
+      }
+    });
+  }
 
   isSwiftAttacking = signal(false);
   swiftAttackTimeoutID: number | undefined;
@@ -47,8 +70,7 @@ export class CombatService {
   handleEnemyDefeat() {
     this.characterService.modifyStat('gold', this.calculateGoldReward());
     this.characterService.advanceWave();
-    this.enemyHP.set(this.calculateEnemyHP());
-    this.enemyMaxHP.set(this.enemyHP());
+    this.enemyHP.set(this.enemyMaxHP());
   }
 
   performAttack() {
@@ -69,22 +91,6 @@ export class CombatService {
     const criticalChance =
       0.1 + this.goldUpgradeService.getTotalEffect(UpgradeEffectType.CRITICAL_CHANCE_BOOST);
     return Math.random() < criticalChance;
-  }
-
-  calculateEnemyHP() {
-    const character = this.characterService.character();
-    const baseHP = 100;
-    const stageMultiplier = 1.5;
-    const waveMultiplier = 0.05;
-
-    const stagePower = Math.pow(stageMultiplier, character.currentStage - 1);
-    const wavePower = Math.pow(1 + waveMultiplier, character.currentWave - 1);
-    let enemyHP = Math.floor(baseHP * stagePower * wavePower);
-    const healthReduction = this.prestigeUpgradeService.getTotalEffect(
-      UpgradeEffectType.ENEMY_HEALTH_REDUCTION,
-    );
-    enemyHP = Math.floor(enemyHP * (1 - healthReduction));
-    return enemyHP;
   }
 
   calculateDamage(): number {

@@ -18,12 +18,13 @@ export class PrestigeService {
   }
 
   calculatePrestigeCores() {
-    if (this.characterService.character().currentStage < 20) return 0;
-    const prestigeCoreGain = Math.floor(
-      4 * Math.log10(this.characterService.character().currentStage),
-    );
+    const currentStage = this.characterService.character().currentStage;
+    if (currentStage < 20) return 0;
+    const BASE = 10;
+    const GROWTH_RATE = 1.26;
+    const baseCores = Math.floor(BASE * Math.pow(GROWTH_RATE, currentStage - 20));
     const multiplier =
       1 + this.prestigeUgpradeService.getTotalEffect(UpgradeEffectType.MULTIPLIER_BOOST);
-    return Math.floor(prestigeCoreGain * multiplier);
+    return Math.floor(baseCores * multiplier);
   }
 }

@@ -1,4 +1,4 @@
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
+<!-- <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
   <p>Current Prestige Cores: {{ character().prestigeCores }}</p>
   <p>Current Gold: {{ character().gold }}</p>
 </section>
@@ -30,4 +30,35 @@
     ></app-prestige-upgrade-card>
     }
   </div>
+</section> -->
+
+<section
+  class="text-main-cyan flex flex-col items-center gap-2 justify-center mt-5 font-mono uppercase glow-cyan"
+>
+  <div class="flex items-center gap-10">
+    <p>Neural Enhancements</p>
+    <p>Core Synthesis</p>
+  </div>
+  <div class="flex gap-10">
+    <div class="text-center">
+      <p class="text-sm text-main-cyan-muted">Current Kaizen Cores</p>
+      <p class="text-2xl">{{ character().prestigeCores }}</p>
+    </div>
+    <div class="text-center">
+      <p class="text-sm text-main-cyan-muted">Current Gold</p>
+      <p class="text-2xl">{{ character().gold }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 mt-15 px-5">
+  @for (upgrade of prestigeUpgrades(); track $index) {
+    <app-upgrade-card
+      [upgrade]="upgrade.upgrade"
+      label="KAIZEN CORES"
+      [currentCost]="upgrade.currentCost"
+      [totalEffect]="upgrade.totalEffect"
+      (purchase)="onPrestigePurchaseUpgrade(upgrade.upgrade.id)"
+    />
+  }
 </section>

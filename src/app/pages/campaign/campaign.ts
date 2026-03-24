@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
-import { NgOptimizedImage, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
@@ -12,7 +12,7 @@ import { Modal } from './components/modal/modal';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal],
+  imports: [NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal],
   templateUrl: './campaign.html',
 })
 export class Campaign {

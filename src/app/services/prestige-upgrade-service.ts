@@ -1,19 +1,31 @@
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { BaseUpgradeService } from './base-upgrade';
 import { Upgrade, UpgradeEffectType, UpgradeScalingType } from '../models/prestige.model';
 import { CharacterService } from './character-service';
 import { api } from '../../../convex/_generated/api';
 import { injectMutation, injectQuery } from 'convex-angular';
+import { ClerkService } from './clerk.service';
 @Injectable({
   providedIn: 'root',
 })
 export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
   private readonly characterService = inject(CharacterService);
+  private readonly clerkService = inject(ClerkService);
+  private activeUserId = signal<string | null>(null);
   private readonly databaseUpdateMutation = injectMutation(
     api.prestigeUpgrades.updatePrestigeUpgradeLevels,
   );
   constructor() {
     super();
+    effect(() => {
+      const userId = this.clerkService.user()?.id ?? null;
+      if (this.activeUserId() === userId) return;
+
+      this.activeUserId.set(userId);
+      this.hasLoadedFromDb.set(false);
+      this.upgrades.set([]);
+    });
+
     this.init(() => this.getPrestigeUpgradeDefinitions(), this.getUpgradesFromDatabase);
   }
 

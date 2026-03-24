@@ -1,21 +1,24 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
-import { NgOptimizedImage } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
+import { BigDecimalFormat } from '../../shared/pipes/BigDecimalFormatthing.pipe';
+import { Sidebar } from './components/sidebar/sidebar';
+import { HPBar } from './components/hp-bar/hp-bar';
+import { Skillbutton } from './components/skillbutton/skillbutton';
+import { Modal } from './components/modal/modal';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage],
+  imports: [NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal],
   templateUrl: './campaign.html',
 })
 export class Campaign {
   characterService = inject(CharacterService);
   combatService = inject(CombatService);
   prestigeService = inject(PrestigeService);
-  isFighting = signal(false);
-  fightIntervalID: any;
   get character() {
     return this.characterService.character;
   }
@@ -25,11 +28,11 @@ export class Campaign {
   damagePerSecond = computed(
     () =>
       Math.floor(this.attackDamage() * (1000 / this.combatService.calculateAttackSpeed()) * 100) /
-      100
+      100,
   );
 
   attackSpeed = computed(
-    () => Math.floor((1000 / this.combatService.calculateAttackSpeed()) * 100) / 100
+    () => Math.floor((1000 / this.combatService.calculateAttackSpeed()) * 100) / 100,
   );
 
   prestige() {
@@ -39,16 +42,12 @@ export class Campaign {
     }
   }
 
-  startFight() {
-    this.combatService.startFighting();
-  }
-
-  stopFight() {
-    this.combatService.stopFighting();
-  }
-
-  skipStage20() {
-    this.character().currentStage = 21;
+  toggleFight() {
+    if (this.combatService.isFighting()) {
+      this.combatService.stopFighting();
+    } else {
+      this.combatService.startFighting();
+    }
   }
 
   modifyStat(
@@ -56,7 +55,7 @@ export class Campaign {
       Character,
       'level' | 'baseStrength' | 'baseIntelligence' | 'baseEndurance' | 'gold'
     >,
-    amount: number
+    amount: number,
   ) {
     this.characterService.modifyStat(stat, amount);
   }

@@ -1,13 +1,16 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { effect, Injectable, inject, signal } from '@angular/core';
 import { Character } from '../models/character.model';
 import { injectMutation, injectQuery } from 'convex-angular';
 import { api } from '../../../convex/_generated/api';
+import { ClerkService } from './clerk.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CharacterService {
   character = signal<Character>(this.returnDefaultCharacter());
+  private readonly clerkService = inject(ClerkService);
+  private activeUserId = signal<string | null>(null);
 
   private getCharacterFromDatabase = injectQuery(api.character.getCharacter, () => ({}));
   private databaseUpdateMutation = injectMutation(api.character.updateCharacter);
@@ -16,8 +19,27 @@ export class CharacterService {
   constructor() {
     const defaultCharacter = this.returnDefaultCharacter();
     effect(() => {
+      const userId = this.clerkService.user()?.id ?? null;
+      if (this.activeUserId() === userId) return;
+
+      this.activeUserId.set(userId);
+      this.hasLoadedFromDb.set(false);
+      this.character.set(this.returnDefaultCharacter());
+    });
+
+    effect(() => {
+      const userId = this.clerkService.user()?.id ?? null;
+      if (!userId) return;
+
       const dbCharacter = this.getCharacterFromDatabase.data();
-      if (!dbCharacter) return;
+      if (dbCharacter === undefined) return;
+
+      if (dbCharacter === null) {
+        this.character.set(defaultCharacter);
+        this.hasLoadedFromDb.set(true);
+        return;
+      }
+
       if (this.hasLoadedFromDb()) {
         this.character.update((char) => ({
           ...char,
@@ -46,7 +68,6 @@ export class CharacterService {
   }
 
   resetCharacter() {
-    // Preserve prestige-related values when resetting
     const currentChar = this.character();
 
     this.character.set({

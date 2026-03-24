@@ -1,6 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
-import { NgOptimizedImage, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { Character } from '../../models/character.model';
 import { CombatService } from '../../services/combat-service';
 import { PrestigeService } from '../../services/prestige-service';
@@ -12,15 +12,13 @@ import { Modal } from './components/modal/modal';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgOptimizedImage, NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal],
+  imports: [NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal],
   templateUrl: './campaign.html',
 })
 export class Campaign {
   characterService = inject(CharacterService);
   combatService = inject(CombatService);
   prestigeService = inject(PrestigeService);
-  isFighting = signal(false);
-  fightIntervalID: any;
   get character() {
     return this.characterService.character;
   }
@@ -45,17 +43,11 @@ export class Campaign {
   }
 
   toggleFight() {
-    if (this.isFighting()) {
-      this.isFighting.set(false);
+    if (this.combatService.isFighting()) {
       this.combatService.stopFighting();
     } else {
-      this.isFighting.set(true);
       this.combatService.startFighting();
     }
-  }
-
-  skipStage20() {
-    this.character().currentStage = 21;
   }
 
   modifyStat(

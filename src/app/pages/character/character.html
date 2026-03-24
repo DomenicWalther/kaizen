@@ -1,37 +1,3 @@
-<!-- <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  <p>Current Prestige Cores: {{ character().prestigeCores }}</p>
-  <p>Current Gold: {{ character().gold }}</p>
-</section>
-
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  <h2 class="text-4xl font-bold">Available Gold Upgrades:</h2>
-  <div class="grid grid-cols-3 gap-4 mt-5">
-    @for (upgrade of goldUpgrades(); track $index) {
-    <app-prestige-upgrade-card
-      [upgrade]="upgrade.upgrade"
-      [currentCost]="upgrade.currentCost"
-      [totalEffect]="upgrade.totalEffect"
-      [label]="'Gold'"
-      (purchase)="onGoldPurchaseUpgrade(upgrade.upgrade.id)"
-    ></app-prestige-upgrade-card>
-    }
-  </div>
-</section>
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  <h2 class="text-3xl font-bold">Available Prestige Upgrades:</h2>
-  <div class="grid grid-cols-3 gap-4 mt-5">
-    @for (upgrade of prestigeUpgrades(); track $index) {
-    <app-prestige-upgrade-card
-      [upgrade]="upgrade.upgrade"
-      [currentCost]="upgrade.currentCost"
-      [totalEffect]="upgrade.totalEffect"
-      [label]="'Prestige Cores'"
-      (purchase)="onPrestigePurchaseUpgrade(upgrade.upgrade.id)"
-    ></app-prestige-upgrade-card>
-    }
-  </div>
-</section> -->
-
 <section
   class="text-main-cyan flex flex-col items-center gap-2 justify-center mt-5 font-mono uppercase glow-cyan"
 >
@@ -52,6 +18,15 @@
 </section>
 
 <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 mt-15 px-5">
+  @for (upgrade of goldUpgrades(); track $index) {
+    <app-upgrade-card
+      [upgrade]="upgrade.upgrade"
+      label="GOLD"
+      [currentCost]="upgrade.currentCost"
+      [totalEffect]="upgrade.totalEffect"
+      (purchase)="onGoldPurchaseUpgrade(upgrade.upgrade.id)"
+    />
+  }
   @for (upgrade of prestigeUpgrades(); track $index) {
     <app-upgrade-card
       [upgrade]="upgrade.upgrade"

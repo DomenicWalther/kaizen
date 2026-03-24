@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Clerk } from '@clerk/clerk-js';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

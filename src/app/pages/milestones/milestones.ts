@@ -28,15 +28,15 @@ export class Milestones {
     },
   ];
 
-  currentMileStone: Milestone = this.strengthMilestones.find(
+  currentMileStone: Milestone | null = this.strengthMilestones.find(
     (milestone) => milestone.level === this.currentLevel
-  )!;
+  ) ?? null;
 
   handleUnlock(milestone: Milestone) {
     this.currentLevel += 1;
     milestone.achieved = true;
     this.currentMileStone = this.strengthMilestones.find(
       (milestone) => milestone.level === this.currentLevel
-    )!;
+    ) ?? null;
   }
 }

@@ -15,9 +15,15 @@ export class MilestoneService {
 
   private loadMilestones(): Milestone[] {
     const saved = localStorage.getItem('milestones');
-    if (saved) {
-      return JSON.parse(saved);
+    if (!saved) {
+      return [];
     }
-    return [];
+
+    try {
+      return JSON.parse(saved);
+    } catch {
+      localStorage.removeItem('milestones');
+      return [];
+    }
   }
 }

@@ -10,7 +10,7 @@ import { BigDecimalFormat } from '../../../../shared/pipes/BigDecimalFormatthing
 })
 export class UpgradeCard {
   upgrade = input.required<Upgrade>();
-  label = input.required<String>();
+  label = input.required<string>();
   currentCost = input.required<number>();
   totalEffect = input.required<number>();
   purchase = output<void>();

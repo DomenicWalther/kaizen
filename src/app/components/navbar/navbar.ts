@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -9,6 +10,7 @@ import { filter } from 'rxjs';
   styleUrl: './navbar-style.css',
 })
 export class Navbar implements AfterViewInit {
+  private readonly destroyRef = inject(DestroyRef);
   @ViewChild('nav') nav!: ElementRef;
   @ViewChild('underline') underline!: ElementRef;
 
@@ -16,9 +18,14 @@ export class Navbar implements AfterViewInit {
   ngAfterViewInit() {
     this.moveUnderline();
 
-    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
-      setTimeout(() => this.moveUnderline());
-    });
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => {
+        setTimeout(() => this.moveUnderline());
+      });
   }
 
   moveUnderline() {

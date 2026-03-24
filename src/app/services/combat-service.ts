@@ -13,6 +13,9 @@ export class CombatService {
   goldUpgradeService = inject(GoldUpgradeService);
   isFighting = signal(false);
   private fightIntervalID: number | undefined;
+  private readonly BASE_ATTACK_SPEED = 1000;
+  private readonly MIN_ATTACK_SPEED = 100;
+  private readonly SWIFT_ATTACK_SKILL_BOOST = 0.5;
 
   enemyHP = signal(0);
   enemyMaxHP = computed(() => {
@@ -24,8 +27,10 @@ export class CombatService {
     const stagePower = Math.pow(stageMultiplier, character.currentStage - 1);
     const wavePower = Math.pow(1 + waveMultiplier, character.currentWave - 1);
     let maxHP = Math.floor(baseHP * stagePower * wavePower);
-    const healthReduction = this.prestigeUpgradeService.getTotalEffect(
-      UpgradeEffectType.ENEMY_HEALTH_REDUCTION,
+    const healthReduction = this.clamp(
+      this.prestigeUpgradeService.getTotalEffect(UpgradeEffectType.ENEMY_HEALTH_REDUCTION),
+      0,
+      0.95,
     );
     maxHP = Math.floor(maxHP * (1 - healthReduction));
     return maxHP;
@@ -33,10 +38,13 @@ export class CombatService {
 
   constructor() {
     effect(() => {
-      const character = this.characterService.character();
-      if (this.characterService.hasLoadedFromDb()) {
-        this.enemyHP.set(this.enemyMaxHP());
-      }
+      if (!this.characterService.hasLoadedFromDb()) return;
+
+      const maxHP = this.enemyMaxHP();
+      this.enemyHP.update((currentHP) => {
+        if (currentHP <= 0) return maxHP;
+        return Math.min(currentHP, maxHP);
+      });
     });
   }
 
@@ -56,16 +64,30 @@ export class CombatService {
   }
 
   startFighting() {
+    if (this.isFighting()) return;
+
     this.isFighting.set(true);
     this.performAttack();
+    this.scheduleNextAttack();
+  }
+
+  private scheduleNextAttack() {
+    if (!this.isFighting()) return;
+
     this.fightIntervalID = setTimeout(() => {
-      this.startFighting();
+      this.performAttack();
+      this.scheduleNextAttack();
     }, this.calculateAttackSpeed());
   }
 
   stopFighting() {
+    if (!this.isFighting()) return;
+
     this.isFighting.set(false);
-    clearTimeout(this.fightIntervalID);
+    if (this.fightIntervalID !== undefined) {
+      clearTimeout(this.fightIntervalID);
+      this.fightIntervalID = undefined;
+    }
   }
   handleEnemyDefeat() {
     this.characterService.modifyStat('gold', this.calculateGoldReward());
@@ -74,6 +96,8 @@ export class CombatService {
   }
 
   performAttack() {
+    if (!this.isFighting()) return;
+
     let attackAmount = this.calculateDamage();
     if (this.criticalHit()) {
       attackAmount *=
@@ -88,8 +112,11 @@ export class CombatService {
   }
 
   criticalHit() {
-    const criticalChance =
-      0.1 + this.goldUpgradeService.getTotalEffect(UpgradeEffectType.CRITICAL_CHANCE_BOOST);
+    const criticalChance = this.clamp(
+      0.1 + this.goldUpgradeService.getTotalEffect(UpgradeEffectType.CRITICAL_CHANCE_BOOST),
+      0,
+      1,
+    );
     return Math.random() < criticalChance;
   }
 
@@ -116,16 +143,20 @@ export class CombatService {
   }
 
   calculateAttackSpeed(): number {
-    const BASE_ATTACK_SPEED = 1000;
-    const SWIFT_ATTACK_SKILL_BOOST = 0.5;
-    const attackSpeedBoost = this.prestigeUpgradeService.getTotalEffect(
+    const rawAttackSpeedBoost = this.prestigeUpgradeService.getTotalEffect(
       UpgradeEffectType.ATTACK_SPEED,
     );
-    const swiftAttackSkill = this.isSwiftAttacking() ? SWIFT_ATTACK_SKILL_BOOST : 1;
-    const finalAttackSpeed = Math.floor(
-      BASE_ATTACK_SPEED * (1 - attackSpeedBoost) * swiftAttackSkill,
+    const attackSpeedBoost = this.clamp(rawAttackSpeedBoost, 0, 0.9);
+    const swiftAttackSkill = this.isSwiftAttacking() ? this.SWIFT_ATTACK_SKILL_BOOST : 1;
+    const finalAttackSpeed = Math.max(
+      this.MIN_ATTACK_SPEED,
+      Math.floor(this.BASE_ATTACK_SPEED * (1 - attackSpeedBoost) * swiftAttackSkill),
     );
     return finalAttackSpeed;
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    return Math.min(max, Math.max(min, value));
   }
 
   calculateGoldReward(): number {

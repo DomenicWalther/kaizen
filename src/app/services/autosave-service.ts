@@ -14,10 +14,10 @@ export interface GameState {
 })
 export class AutoSaveService {
   private saveIntervalID: number | undefined;
-  private lastSavedGameState: GameState | undefined;
+  private lastSavedStateDigest: string | undefined;
   private autoSaveHasStarted = false;
 
-  AUTO_SAVE_INTERVAL = 300000; // 5 minutes #TODO: FOR DEBUGGING 10S RIGHT NOW, CHANGE BACK TO 5 MIN
+  readonly AUTO_SAVE_INTERVAL = 5 * 60 * 1000;
 
   constructor(private GameStateService: GameStateService) {
     effect(() => {
@@ -38,13 +38,34 @@ export class AutoSaveService {
   }
 
   checkAndSave() {
-    const currentGameState = this.GameStateService.getState();
+    const currentStateDigest = this.createStateDigest(this.GameStateService.getState());
 
-    if (JSON.stringify(currentGameState) !== JSON.stringify(this.lastSavedGameState)) {
+    if (currentStateDigest !== this.lastSavedStateDigest) {
       this.GameStateService.pushUpdatesToDatabase();
-
-      this.lastSavedGameState = currentGameState;
+      this.lastSavedStateDigest = currentStateDigest;
     }
+  }
+
+  private createStateDigest(state: GameState): string {
+    return JSON.stringify({
+      character: {
+        id: state.character.id,
+        prestigeLevel: state.character.prestigeLevel,
+        prestigeMultipliers: state.character.prestigeMultipliers,
+        prestigeCores: state.character.prestigeCores,
+        gold: state.character.gold,
+        currentStage: state.character.currentStage,
+        currentWave: state.character.currentWave,
+      },
+      goldUpgrades: state.goldUpgrades.map((upgrade) => ({
+        id: upgrade.id,
+        currentLevel: upgrade.currentLevel,
+      })),
+      prestigeUpgrades: state.prestigeUpgrades.map((upgrade) => ({
+        id: upgrade.id,
+        currentLevel: upgrade.currentLevel,
+      })),
+    });
   }
 
   stopAutoSave() {

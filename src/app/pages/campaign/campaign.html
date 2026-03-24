@@ -1,67 +1,87 @@
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white">
-  <h2 class="text-4xl font-bold">Campaign</h2>
-  <div class="mt-5">
-    <ul>
-      <li>Current Stage: {{ character().currentStage }}</li>
-      <li>Current Wave: {{ character().currentWave }}</li>
-    </ul>
-  </div>
-</section>
-<section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-4">
-  <div>
-    <p>Your Damage: {{ attackDamage() }}</p>
-    <p>Damage per Second: {{ damagePerSecond() }}</p>
-    <p>Your Attack Speed: {{ attackSpeed() }}/s</p>
-    <p>Strength: {{ character().baseStrength }}</p>
-    <p>
-      Multipliers: {{ character().strengthModifier }} x
-      {{ character().prestigeLevel }}
-    </p>
-    <p>Prestige Cores: {{ character().prestigeCores }}</p>
-    <p>Gold: {{ character().gold }}</p>
-  </div>
-  <div>
-    <img ngSrc="/sprites/necromancer.png" alt="Enemy Sprite" width="256" height="294" />
-    <p>Enemy HP: {{ combatService.enemyHP() }}</p>
-    <progress
-      [value]="combatService.enemyHP()"
-      [max]="combatService.calculateEnemyHP()"
-      class="[&::-webkit-progress-bar]:bg-green-600 [&::-moz-progress-bar]:bg-green-600 bg-red-900"
-    ></progress>
-  </div>
-  @if (combatService.isFighting()) {
-  <button class="p-5 bg-gray-500 text-white font-bold" (click)="stopFight()">Stop Fight</button>
-  } @else {
+<div class="h-full grid grid-rows-[1fr_auto]">
+  <app-modal
+    #ascensionModal
+    [coreLabel]="prestigeService.calculatePrestigeCores()"
+    (triggerCallback)="prestige()"
+  ></app-modal>
+  <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
+    <app-sidebar
+      [character]="character()"
+      [attackDamage]="attackDamage()"
+      [attackSpeed]="attackSpeed()"
+      class="h-full"
+    />
+    <div
+      class="flex justify-between text-main-cyan font-mono border-r-2 glow-cyan border-r-grid-line px-20"
+    >
+      <div class="flex justify-around mt-20 w-full">
+        <div>
+          <p class="text-main-cyan-muted text-sm">
+            SECTOR_{{ character().currentStage }}-X_OHSIDIAN
+          </p>
+          <p class="text-6xl font-impact">VOID STALKER</p>
+          <div>
+            <p>
+              {{ combatService.enemyHP() | BigDecimalFormat
+              }}<span class="text-main-cyan-muted"> / </span
+              >{{ combatService.enemyMaxHP() | BigDecimalFormat }} HP
+            </p>
+            <app-hp-bar
+              [currentHP]="combatService.enemyHP()"
+              [enemyMAXHP]="combatService.enemyMaxHP()"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 text-end relative">
+          <p class="text-main-cyan-muted text-sm tracking-widest">WAVE PROGRESS</p>
+          <p class="text-5xl">
+            {{ character().currentWave }}<span class="text-main-cyan-muted">/</span>10
+          </p>
+          <div class="flex">
+            <div
+              class="h-0.5 bottom-0 bg-main-cyan"
+              [ngStyle]="{ width: character().currentWave * 10 + '%' }"
+            ></div>
 
-  <button class="p-5 bg-blue-950 text-white font-bold" (click)="startFight()">Begin Fight</button>
-  }
-  <button
-    class="p-5 bg-yellow-600 text-white font-bold disabled:bg-gray-700"
-    (click)="prestige()"
-    [disabled]="prestigeService.calculatePrestigeCores() <= 0"
+            <div
+              class="h-0.5 bottom-0 bg-main-cyan-muted"
+              [ngStyle]="{ width: 100 - character().currentWave * 10 + '%' }"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>Test</div>
+  </section>
+  <footer
+    class="text-main-cyan font-mono h-[10vh] px-20 border-t border-t-grid-line flex items-center justify-between"
   >
-    Prestige +{{ prestigeService.calculatePrestigeCores() }} Cores on Prestige
-  </button>
-  <button class="p-5 bg-green-700 text-white font-bold" (click)="skipStage20()">
-    Skip to Stage 20
-  </button>
-  <button
-    class="p-5 bg-purple-700 text-white font-bold disabled:bg-gray-700"
-    (click)="combatService.useSwiftAttackSkill()"
-    [disabled]="combatService.isSwiftAttacking()"
-  >
-    Use Swift Attack Skill
-  </button>
-</section>
-<!-- <section class="mt-10 ml-10 border-2 p-5 rounded-lg shadow-lg bg-white flex flex-col gap-5">
-  <button class="px-5 py-10 bg-blue-950 text-white font-bold" (click)="increaseAttackSpeed()">
-    Increase Attack Speed
-  </button>
-  <button
-    class="px-5 py-10 bg-blue-950 text-white font-bold"
-    (click)="modifyStat('baseStrength', 1)"
-  >
-    Increase Strength
-  </button>
-  <button class="px-5 py-10 bg-blue-950 text-white font-bold">Increase Prestige Multiplier</button>
-</section> -->
+    <div>
+      <p class="text-main-cyan-muted text-sm mb-2">AUTOMATION</p>
+      <button
+        class="bg-main-cyan-muted/20 text-main-cyan border-main-cyan/50 glow-cyan border-2 px-12 py-4 cursor-pointer"
+        (click)="toggleFight()"
+      >
+        @if (combatService.isFighting()) {
+          AUTO_FIGHT: ON
+        } @else {
+          AUTO_FIGHT: OFF
+        }
+      </button>
+    </div>
+    <div>
+      <app-skillbutton (skillTriggered)="combatService.useSwiftAttackSkill()">
+        SWIFT <br />STRIKE
+      </app-skillbutton>
+    </div>
+    <div>
+      <button
+        type="button"
+        class="text-black font-bold bg-main-Amber px-20 py-4 text-2xl font-mono tracking-widest shadow-[0_0_8px_rgba(255,184,0,0.6)]"
+        (click)="ascensionModal.toggleModal()"
+      >
+        INITIATE ASCENSION
+      </button>
+    </div>
+  </footer>
+</div>

@@ -13,7 +13,7 @@ import {
 
 import { routes } from './app.routes';
 import { ClerkAuthService } from './services/clerk-auth.service';
-import { environment } from '../environments/environment.development';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [

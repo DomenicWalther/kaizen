@@ -1,12 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
-import { PrestigeUpgradeCard } from '../../components/prestige-upgrade-card/prestige-upgrade-card';
 import { PrestigeUpgradeService } from '../../services/prestige-upgrade-service';
 import { GoldUpgradeService } from '../../services/gold-upgrade-service';
+import { UpgradeCard } from './components/upgrade-card/upgrade-card';
 
 @Component({
   selector: 'app-character',
-  imports: [PrestigeUpgradeCard],
+  imports: [UpgradeCard],
   templateUrl: './character.html',
 })
 export class Character {

@@ -2,6 +2,39 @@ import { getCurrentUser } from './lib/auth';
 import { mutation, query } from './_generated/server';
 import { v } from 'convex/values';
 
+function assertFiniteNonNegative(value: number, field: string) {
+  if (!Number.isFinite(value) || value < 0) {
+    throw new Error(`Invalid ${field}`);
+  }
+}
+
+function assertCharacterPayload(args: {
+  prestigeLevel: number;
+  prestigeMultipliers: { strength: number; intelligence: number; endurance: number };
+  prestigeCores: number;
+  gold: number;
+  currentStage: number;
+  currentWave: number;
+}) {
+  assertFiniteNonNegative(args.prestigeLevel, 'prestigeLevel');
+  assertFiniteNonNegative(args.prestigeCores, 'prestigeCores');
+  assertFiniteNonNegative(args.gold, 'gold');
+  assertFiniteNonNegative(args.currentStage, 'currentStage');
+  assertFiniteNonNegative(args.currentWave, 'currentWave');
+
+  if (!Number.isInteger(args.currentStage) || args.currentStage < 1) {
+    throw new Error('Invalid currentStage');
+  }
+  if (!Number.isInteger(args.currentWave) || args.currentWave < 1 || args.currentWave > 10) {
+    throw new Error('Invalid currentWave');
+  }
+
+  const { strength, intelligence, endurance } = args.prestigeMultipliers;
+  assertFiniteNonNegative(strength, 'prestigeMultipliers.strength');
+  assertFiniteNonNegative(intelligence, 'prestigeMultipliers.intelligence');
+  assertFiniteNonNegative(endurance, 'prestigeMultipliers.endurance');
+}
+
 export const getCharacter = query({
   args: {},
   handler: async (ctx) => {
@@ -33,6 +66,7 @@ export const updateCharacter = mutation({
   handler: async (ctx, args) => {
     const user = await getCurrentUser(ctx);
     if (!user) throw new Error('Not authenticated');
+    assertCharacterPayload(args);
 
     const existing = await ctx.db
       .query('character')

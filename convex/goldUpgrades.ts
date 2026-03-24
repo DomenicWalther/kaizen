@@ -31,7 +31,14 @@ export const updateGoldUpgradeLevels = mutation({
 
         if (existing) {
           await ctx.db.patch(existing._id, { currentLevel: upgrade.currentLevel });
+          return;
         }
+
+        await ctx.db.insert('goldUpgrades', {
+          id: upgrade.id,
+          currentLevel: upgrade.currentLevel,
+          userId: user._id,
+        });
       })
     );
   },

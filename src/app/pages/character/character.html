@@ -1,39 +1,112 @@
-<section
-  class="text-main-cyan flex flex-col items-center gap-2 justify-center mt-5 font-mono uppercase glow-cyan"
->
-  <div class="flex items-center gap-10">
-    <p>Neural Enhancements</p>
-    <p>Core Synthesis</p>
-  </div>
-  <div class="flex gap-10">
-    <div class="text-center">
-      <p class="text-sm text-main-cyan-muted">Current Kaizen Cores</p>
-      <p class="text-2xl">{{ character().prestigeCores }}</p>
-    </div>
-    <div class="text-center">
-      <p class="text-sm text-main-cyan-muted">Current Gold</p>
-      <p class="text-2xl">{{ character().gold }}</p>
-    </div>
-  </div>
-</section>
+<main class="text-main-cyan font-mono uppercase glow-cyan px-5 py-8 md:px-10">
+  <section class="mx-auto max-w-7xl">
+    <div class="mb-8 flex flex-col gap-6 border-b border-main-cyan/30 pb-8 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-xs tracking-[0.35em] text-main-cyan-muted">CHARACTER // AUGMENTATION</p>
+        <h1 class="mt-3 font-display text-3xl font-bold tracking-widest md:text-4xl">
+          Upgrade Matrix
+        </h1>
+        <p class="mt-3 max-w-xl text-sm normal-case tracking-normal text-main-cyan-muted">
+          Tune your operative with persistent enhancements and spend the resource shown on each
+          upgrade.
+        </p>
+      </div>
 
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 mt-15 px-5">
-  @for (upgrade of goldUpgrades(); track $index) {
-    <app-upgrade-card
-      [upgrade]="upgrade.upgrade"
-      label="GOLD"
-      [currentCost]="upgrade.currentCost"
-      [totalEffect]="upgrade.totalEffect"
-      (purchase)="onGoldPurchaseUpgrade(upgrade.upgrade.id)"
-    />
-  }
-  @for (upgrade of prestigeUpgrades(); track $index) {
-    <app-upgrade-card
-      [upgrade]="upgrade.upgrade"
-      label="KAIZEN CORES"
-      [currentCost]="upgrade.currentCost"
-      [totalEffect]="upgrade.totalEffect"
-      (purchase)="onPrestigePurchaseUpgrade(upgrade.upgrade.id)"
-    />
-  }
-</section>
+      <div class="grid grid-cols-2 gap-3 text-right">
+        <div class="border border-main-cyan/30 bg-main-cyan-muted/10 px-4 py-3">
+          <p class="text-[0.65rem] tracking-[0.2em] text-main-cyan-muted">GOLD</p>
+          <p class="mt-1 text-xl">{{ character().gold | BigDecimalFormat }}</p>
+        </div>
+        <div class="border border-main-cyan/30 bg-main-cyan-muted/10 px-4 py-3">
+          <p class="text-[0.65rem] tracking-[0.2em] text-main-cyan-muted">KAIZEN CORES</p>
+          <p class="mt-1 text-xl">{{ character().prestigeCores | BigDecimalFormat }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border border-main-cyan/40 bg-main-cyan-muted/5" role="tablist" aria-label="Upgrade categories">
+      <div class="grid grid-cols-2">
+        <button
+          type="button"
+          role="tab"
+          class="border-b-2 px-4 py-4 text-left transition-colors cursor-pointer"
+          [class.border-main-cyan]="selectedTab() === 'neural'"
+          [class.border-transparent]="selectedTab() !== 'neural'"
+          [class.bg-main-cyan-muted]="selectedTab() === 'neural'"
+          [attr.aria-selected]="selectedTab() === 'neural'"
+          aria-controls="neural-upgrades"
+          (click)="selectTab('neural')"
+        >
+          <span class="block text-sm tracking-[0.2em]">Neural Enhancement</span>
+          <span class="mt-1 block text-xs normal-case tracking-normal text-main-cyan-muted"
+            >Gold-funded combat upgrades</span
+          >
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="border-b-2 px-4 py-4 text-left transition-colors cursor-pointer"
+          [class.border-main-cyan]="selectedTab() === 'core'"
+          [class.border-transparent]="selectedTab() !== 'core'"
+          [class.bg-main-cyan-muted]="selectedTab() === 'core'"
+          [attr.aria-selected]="selectedTab() === 'core'"
+          aria-controls="core-upgrades"
+          (click)="selectTab('core')"
+        >
+          <span class="block text-sm tracking-[0.2em]">Core Synthesis</span>
+          <span class="mt-1 block text-xs normal-case tracking-normal text-main-cyan-muted"
+            >Kaizen Core persistent upgrades</span
+          >
+        </button>
+      </div>
+    </div>
+
+    @if (selectedTab() === 'neural') {
+      <section id="neural-upgrades" role="tabpanel" aria-label="Neural Enhancement upgrades">
+        <div class="mt-8 flex items-end justify-between gap-4">
+          <div>
+            <p class="text-xs tracking-[0.25em] text-main-cyan-muted">AVAILABLE AUGMENTATIONS</p>
+            <h2 class="mt-2 text-xl tracking-widest">Neural Enhancement</h2>
+          </div>
+          <p class="text-right text-xs text-main-cyan-muted">{{ goldUpgrades().length }} MODULES</p>
+        </div>
+
+        <div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          @for (upgrade of goldUpgrades(); track upgrade.upgrade.id) {
+            <app-upgrade-card
+              [upgrade]="upgrade.upgrade"
+              label="GOLD"
+              [currentCost]="upgrade.currentCost"
+              [totalEffect]="upgrade.totalEffect"
+              [canPurchase]="upgrade.canPurchase"
+              (purchase)="onGoldPurchaseUpgrade(upgrade.upgrade.id)"
+            />
+          }
+        </div>
+      </section>
+    } @else {
+      <section id="core-upgrades" role="tabpanel" aria-label="Core Synthesis upgrades">
+        <div class="mt-8 flex items-end justify-between gap-4">
+          <div>
+            <p class="text-xs tracking-[0.25em] text-main-cyan-muted">AVAILABLE SYNTHESIS</p>
+            <h2 class="mt-2 text-xl tracking-widest">Core Synthesis</h2>
+          </div>
+          <p class="text-right text-xs text-main-cyan-muted">{{ prestigeUpgrades().length }} MODULES</p>
+        </div>
+
+        <div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          @for (upgrade of prestigeUpgrades(); track upgrade.upgrade.id) {
+            <app-upgrade-card
+              [upgrade]="upgrade.upgrade"
+              label="KAIZEN CORES"
+              [currentCost]="upgrade.currentCost"
+              [totalEffect]="upgrade.totalEffect"
+              [canPurchase]="upgrade.canPurchase"
+              (purchase)="onPrestigePurchaseUpgrade(upgrade.upgrade.id)"
+            />
+          }
+        </div>
+      </section>
+    }
+  </section>
+</main>

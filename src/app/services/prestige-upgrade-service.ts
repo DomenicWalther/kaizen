@@ -68,7 +68,7 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
       {
         id: 'strength_multiplier',
         name: 'Titans Power',
-        description: 'Increase strength by 1 per Level',
+        description: 'Increase total damage by 100% per Level',
         baseCost: 1,
         costScaling: 1.8,
         effectType: UpgradeEffectType.FLAT_STAT_BOOST,
@@ -112,7 +112,7 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
       {
         id: 'dps_per_core',
         name: 'Hoarded Power',
-        description: 'Gain %2 DPS per unused Kaizen-Core',
+        description: 'Gain 2% damage per unused Kaizen Core for each Level',
         baseCost: 1,
         costScaling: 2.5,
         effectType: UpgradeEffectType.DYNAMIC_PER_CORE,

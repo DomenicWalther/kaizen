@@ -99,6 +99,17 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
         currentLevel: 0,
       },
       {
+        id: 'overkill_stage',
+        name: 'Overkill Protocol',
+        description: 'Clear 1 additional wave per Level when excess damage allows it',
+        baseCost: 1,
+        costScaling: 2,
+        effectType: UpgradeEffectType.OVERKILL_WAVE,
+        effectValue: 1,
+        effectScaling: UpgradeScalingType.LINEAR,
+        currentLevel: 0,
+      },
+      {
         id: 'dps_per_core',
         name: 'Hoarded Power',
         description: 'Gain %2 DPS per unused Kaizen-Core',

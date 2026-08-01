@@ -116,12 +116,21 @@ export class CharacterService {
       lastActiveAt: new Date(),
     };
   }
-  advanceWave() {
-    this.character.update((char) => ({
-      ...char,
-      currentWave: char.currentWave < 10 ? char.currentWave + 1 : 1,
-      currentStage: char.currentWave === 10 ? char.currentStage + 1 : char.currentStage,
-    }));
+  advanceWave(overkillWaves = 0) {
+    const wavesToSkip = Number.isFinite(overkillWaves)
+      ? Math.max(0, Math.floor(overkillWaves))
+      : 0;
+
+    this.character.update((char) => {
+      const currentWaveIndex = (char.currentStage - 1) * 10 + (char.currentWave - 1);
+      const nextWaveIndex = currentWaveIndex + wavesToSkip + 1;
+
+      return {
+        ...char,
+        currentStage: Math.floor(nextWaveIndex / 10) + 1,
+        currentWave: (nextWaveIndex % 10) + 1,
+      };
+    });
   }
 
   modifyStat(

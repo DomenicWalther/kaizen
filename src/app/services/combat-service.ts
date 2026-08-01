@@ -103,12 +103,38 @@ export class CombatService {
       attackAmount *=
         2 + this.goldUpgradeService.getTotalEffect(UpgradeEffectType.CRITICAL_DAMAGE_BOOST);
     }
-    const remainingHP = Math.max(0, Math.floor(this.enemyHP() - attackAmount));
+    const currentHP = this.enemyHP();
+    const remainingHP = Math.max(0, Math.floor(currentHP - attackAmount));
     const defeated = remainingHP === 0;
     this.enemyHP.set(remainingHP);
     if (defeated) {
       this.handleEnemyDefeat();
+      this.applyOverkillDamage(attackAmount - currentHP);
     }
+  }
+
+  private applyOverkillDamage(remainingDamage: number): void {
+    const overkillWaves = Math.max(
+      0,
+      Math.floor(this.prestigeUpgradeService.getTotalEffect(UpgradeEffectType.OVERKILL_WAVE)),
+    );
+    if (overkillWaves === 0 || remainingDamage <= 0) return;
+
+    let wavesCleared = 0;
+    while (wavesCleared < overkillWaves) {
+      const nextTargetHP = this.enemyMaxHP();
+      if (remainingDamage < nextTargetHP) {
+        this.enemyHP.set(Math.floor(nextTargetHP - remainingDamage));
+        return;
+      }
+
+      remainingDamage -= nextTargetHP;
+      this.handleEnemyDefeat();
+      wavesCleared++;
+    }
+
+    const nextTargetHP = this.enemyMaxHP();
+    this.enemyHP.set(Math.max(1, Math.floor(nextTargetHP - remainingDamage)));
   }
 
   criticalHit() {

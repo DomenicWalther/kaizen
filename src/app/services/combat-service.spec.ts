@@ -54,15 +54,17 @@ class MockGoldUpgradeService {
 
 describe('CombatService', () => {
   let service: CombatService;
+  let characterService: MockCharacterService;
   let prestigeUpgradeService: MockPrestigeUpgradeService;
 
   beforeEach(() => {
+    characterService = new MockCharacterService();
     prestigeUpgradeService = new MockPrestigeUpgradeService();
 
     TestBed.configureTestingModule({
       providers: [
         CombatService,
-        { provide: CharacterService, useValue: new MockCharacterService() },
+        { provide: CharacterService, useValue: characterService },
         { provide: PrestigeUpgradeService, useValue: prestigeUpgradeService },
         { provide: GoldUpgradeService, useValue: new MockGoldUpgradeService() },
       ],
@@ -94,5 +96,51 @@ describe('CombatService', () => {
     service.startFighting();
 
     expect(scheduleSpy.calls.count()).toBe(1);
+  });
+
+  it('passes the purchased Overkill wave limit when excess damage clears an enemy', () => {
+    characterService.character.update((character) => ({ ...character, baseStrength: 1_000 }));
+    prestigeUpgradeService.effects.set(UpgradeEffectType.OVERKILL_WAVE, 2);
+    service.enemyHP.set(service.enemyMaxHP());
+
+    service.startFighting();
+    service.stopFighting();
+
+    expect(characterService.advanceWave.calls.count()).toBe(3);
+    expect(characterService.advanceWave.calls.allArgs()).toEqual([[], [], []]);
+  });
+
+  it('does not overkill waves when the attack only defeats the current enemy', () => {
+    characterService.character.update((character) => ({ ...character, baseStrength: 100 }));
+    prestigeUpgradeService.effects.set(UpgradeEffectType.OVERKILL_WAVE, 2);
+    service.enemyHP.set(service.enemyMaxHP());
+
+    service.startFighting();
+    service.stopFighting();
+
+    expect(characterService.advanceWave.calls.count()).toBe(1);
+    expect(characterService.advanceWave.calls.allArgs()).toEqual([[]]);
+  });
+
+  it('carries remaining damage into the next target after overkilling one wave', () => {
+    spyOn(Math, 'random').and.returnValue(1);
+    characterService.character.update((character) => ({ ...character, baseStrength: 100 }));
+    prestigeUpgradeService.effects.set(UpgradeEffectType.ENEMY_HEALTH_REDUCTION, 0.6);
+    prestigeUpgradeService.effects.set(UpgradeEffectType.OVERKILL_WAVE, 1);
+    characterService.advanceWave.and.callFake(() => {
+      characterService.character.update((character) => ({
+        ...character,
+        currentWave: character.currentWave === 10 ? 1 : character.currentWave + 1,
+        currentStage:
+          character.currentWave === 10 ? character.currentStage + 1 : character.currentStage,
+      }));
+    });
+    service.enemyHP.set(service.enemyMaxHP());
+
+    service.startFighting();
+    service.stopFighting();
+
+    expect(characterService.advanceWave.calls.count()).toBe(2);
+    expect(service.enemyHP()).toBe(26);
   });
 });

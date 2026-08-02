@@ -54,7 +54,7 @@ export class CharacterService {
     });
   }
 
-  public updateDatabase(): void {
+  public async updateDatabase(): Promise<void> {
     const characterToSave = {
       id: this.character().id,
       prestigeLevel: this.character().prestigeLevel,
@@ -64,7 +64,10 @@ export class CharacterService {
       currentStage: this.character().currentStage,
       currentWave: this.character().currentWave,
     };
-    this.databaseUpdateMutation.mutate(characterToSave);
+    await this.databaseUpdateMutation.mutate(characterToSave);
+
+    const error = this.databaseUpdateMutation.error();
+    if (error) throw error;
   }
 
   resetCharacter() {

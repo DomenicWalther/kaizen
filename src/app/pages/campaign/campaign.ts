@@ -9,10 +9,11 @@ import { Sidebar } from './components/sidebar/sidebar';
 import { HPBar } from './components/hp-bar/hp-bar';
 import { Skillbutton } from './components/skillbutton/skillbutton';
 import { Modal } from './components/modal/modal';
+import { MacroPanel } from './components/macro-panel/macro-panel';
 
 @Component({
   selector: 'app-campaign',
-  imports: [NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal],
+  imports: [NgStyle, BigDecimalFormat, Sidebar, HPBar, Skillbutton, Modal, MacroPanel],
   templateUrl: './campaign.html',
 })
 export class Campaign {

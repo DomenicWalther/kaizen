@@ -2,6 +2,7 @@ import { AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild } f
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
+import { AutoSaveService } from '../../services/autosave-service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,18 @@ export class Navbar implements AfterViewInit {
   @ViewChild('nav') nav!: ElementRef;
   @ViewChild('underline') underline!: ElementRef;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    readonly autoSaveService: AutoSaveService,
+  ) {}
+
+  async saveNow() {
+    try {
+      await this.autoSaveService.saveNow();
+    } catch {
+      // The service exposes the error state for the navbar; no further action is needed here.
+    }
+  }
   ngAfterViewInit() {
     this.moveUnderline();
 

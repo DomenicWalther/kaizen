@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { CharacterService } from './character-service';
 import { UpgradeEffectType } from '../models/prestige.model';
 import { PrestigeUpgradeService } from './prestige-upgrade-service';
+import { AutoSaveService } from './autosave-service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +10,14 @@ import { PrestigeUpgradeService } from './prestige-upgrade-service';
 export class PrestigeService {
   characterService = inject(CharacterService);
   prestigeUgpradeService = inject(PrestigeUpgradeService);
+  autoSaveService = inject(AutoSaveService);
 
   prestige() {
     const coresEarned = this.calculatePrestigeCores();
     this.characterService.resetCharacter();
     this.characterService.modifyStat('prestigeCores', coresEarned);
     this.characterService.modifyStat('prestigeLevel', 1);
+    void this.autoSaveService.saveNow().catch(() => undefined);
   }
 
   calculatePrestigeCores() {

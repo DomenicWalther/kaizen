@@ -1,9 +1,21 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { UpgradeEffectType } from '../models/prestige.model';
+import { calculateUpgradeEffect, UpgradeEffectType } from '../models/prestige.model';
 
 export interface UpgradeSaveData {
   id: string;
   currentLevel: number;
+}
+
+export function createUpgradeSaveData(
+  defaultUpgrades: readonly UpgradeSaveData[],
+  loadedUpgrades: readonly UpgradeSaveData[],
+): UpgradeSaveData[] {
+  return defaultUpgrades.map((upgrade) => ({
+    id: upgrade.id,
+    currentLevel:
+      loadedUpgrades.find((loadedUpgrade) => loadedUpgrade.id === upgrade.id)?.currentLevel ??
+      upgrade.currentLevel,
+  }));
 }
 
 interface UpdateQuery {
@@ -14,18 +26,19 @@ export abstract class BaseUpgradeService<
   T extends { id: string; currentLevel: number; effectType: UpgradeEffectType },
 > {
   protected upgrades = signal<T[]>([]);
+  private defaultUpgrades: T[] = [];
   readonly allUpgrades = this.upgrades.asReadonly();
   hasLoadedFromDb = signal(false);
 
   protected init(getDefaultUpgrades: () => T[], query: UpdateQuery) {
-    const defaultUpgrades = getDefaultUpgrades();
+    this.defaultUpgrades = getDefaultUpgrades();
 
     effect(() => {
       if (this.hasLoadedFromDb()) return;
       const dbUpgrades = query.data();
       if (!dbUpgrades) return;
 
-      const merged = defaultUpgrades.map((upgrade) => {
+      const merged = this.defaultUpgrades.map((upgrade) => {
         const savedUpgrade = dbUpgrades.find((s: any) => s.id === upgrade.id);
         return {
           ...upgrade,
@@ -40,7 +53,11 @@ export abstract class BaseUpgradeService<
 
   protected abstract getCurrentCurrency(): number;
   protected abstract spendCurrency(amount: number): void;
-  public abstract updateDatabase(): void;
+  public abstract updateDatabase(): Promise<void>;
+
+  protected getUpgradeSaveData(): UpgradeSaveData[] {
+    return createUpgradeSaveData(this.defaultUpgrades, this.upgrades());
+  }
 
   calculateCost(upgrade: T & { baseCost: number; costScaling: number }): number {
     return Math.floor(upgrade.baseCost * Math.pow(upgrade.costScaling, upgrade.currentLevel));
@@ -81,15 +98,6 @@ export abstract class BaseUpgradeService<
   }
 
   calculateEffect(upgrade: any): number {
-    switch (upgrade.effectScaling) {
-      case 'linear':
-        return upgrade.effectValue * upgrade.currentLevel;
-      case 'exponential':
-        return Math.pow(upgrade.effectValue, upgrade.currentLevel);
-      case 'fixed_per_level':
-        return upgrade.effectValue * (upgrade.currentLevel > 0 ? 1 : 0);
-      default:
-        return 0;
-    }
+    return calculateUpgradeEffect(upgrade.effectValue, upgrade.effectScaling, upgrade.currentLevel);
   }
 }

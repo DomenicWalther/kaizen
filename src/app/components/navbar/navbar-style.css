@@ -12,3 +12,25 @@ ul {
     width: 0;
     transition: left 300ms ease, width 600ms ease;
 }
+
+.save-button {
+    border: 1px solid currentColor;
+    padding: 0.65rem 0.85rem;
+    color: inherit;
+    font: inherit;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease;
+}
+
+.save-button:hover:not(:disabled),
+.save-button:focus-visible:not(:disabled) {
+    background: currentColor;
+    color: #05070a;
+}
+
+.save-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}

@@ -83,10 +83,19 @@ describe('CombatService', () => {
     expect(service.calculateAttackSpeed()).toBe(100);
   });
 
-  it('clamps enemy health reduction so max HP never drops to 0', () => {
+  it('keeps enemy health positive when an invalid reduction reaches 100%', () => {
     prestigeUpgradeService.effects.set(UpgradeEffectType.ENEMY_HEALTH_REDUCTION, 10);
 
-    expect(service.enemyMaxHP()).toBe(5);
+    expect(service.enemyMaxHP()).toBe(1);
+  });
+
+  it('applies the diminishing Fragile Foes effect to enemy max HP', () => {
+    prestigeUpgradeService.effects.set(
+      UpgradeEffectType.ENEMY_HEALTH_REDUCTION,
+      0.676466455026291,
+    );
+
+    expect(service.enemyMaxHP()).toBe(32);
   });
 
   it('does not start multiple fight loops when already fighting', () => {

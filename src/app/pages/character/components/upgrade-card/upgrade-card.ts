@@ -1,5 +1,9 @@
 import { Component, computed, input, output } from '@angular/core';
-import { Upgrade, UpgradeEffectType } from '../../../../models/prestige.model';
+import {
+  calculateUpgradeEffect,
+  Upgrade,
+  UpgradeEffectType,
+} from '../../../../models/prestige.model';
 import { BigDecimalFormat } from '../../../../shared/pipes/BigDecimalFormatthing.pipe';
 
 @Component({
@@ -25,17 +29,7 @@ export class UpgradeCard {
 
   private calculateEffectAtLevel(level: number): number {
     const upgrade = this.upgrade();
-
-    switch (upgrade.effectScaling) {
-      case 'linear':
-        return upgrade.effectValue * level;
-      case 'exponential':
-        return Math.pow(upgrade.effectValue, level);
-      case 'fixed_per_level':
-        return upgrade.effectValue * (level > 0 ? 1 : 0);
-      default:
-        return 0;
-    }
+    return calculateUpgradeEffect(upgrade.effectValue, upgrade.effectScaling, level);
   }
 
   private formatEffect(value: number): string {

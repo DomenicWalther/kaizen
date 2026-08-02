@@ -22,24 +22,22 @@ export const updatePrestigeUpgradeLevels = mutation({
     const user = await getCurrentUser(ctx);
     if (!user) throw new Error('Not authenticated');
 
-    await Promise.all(
-      args.upgrades.map(async (upgrade) => {
-        const existing = await ctx.db
-          .query('prestigeUpgrades')
-          .withIndex('by_user_and_id', (q) => q.eq('userId', user._id).eq('id', upgrade.id))
-          .first();
+    for (const upgrade of args.upgrades) {
+      const existing = await ctx.db
+        .query('prestigeUpgrades')
+        .withIndex('by_user_and_id', (q) => q.eq('userId', user._id).eq('id', upgrade.id))
+        .first();
 
-        if (existing) {
-          await ctx.db.patch(existing._id, { currentLevel: upgrade.currentLevel });
-          return;
-        }
+      if (existing) {
+        await ctx.db.patch(existing._id, { currentLevel: upgrade.currentLevel });
+        continue;
+      }
 
-        await ctx.db.insert('prestigeUpgrades', {
-          id: upgrade.id,
-          currentLevel: upgrade.currentLevel,
-          userId: user._id,
-        });
-      })
-    );
+      await ctx.db.insert('prestigeUpgrades', {
+        id: upgrade.id,
+        currentLevel: upgrade.currentLevel,
+        userId: user._id,
+      });
+    }
   },
 });

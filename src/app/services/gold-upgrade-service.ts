@@ -35,14 +35,16 @@ export class GoldUpgradeService extends BaseUpgradeService<Upgrade> {
     return this.characterService.character().gold;
   }
 
-  public override updateDatabase(): void {
-    const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
-      (upgrade) => ({
-        id: upgrade.id,
-        currentLevel: upgrade.currentLevel,
-      }),
-    );
-    this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
+  public override updateDatabase(): Promise<void> {
+    const upgradesToSave = this.getUpgradeSaveData();
+    return this.saveUpgradeData(upgradesToSave);
+  }
+
+  private async saveUpgradeData(upgrades: { id: string; currentLevel: number }[]): Promise<void> {
+    await this.databaseUpdateMutation.mutate({ upgrades });
+
+    const error = this.databaseUpdateMutation.error();
+    if (error) throw error;
   }
   protected override spendCurrency(amount: number) {
     this.characterService.spendGold(amount);

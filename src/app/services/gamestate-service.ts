@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { GoldUpgradeService } from './gold-upgrade-service';
 import { PrestigeUpgradeService } from './prestige-upgrade-service';
 import { CharacterService } from './character-service';
@@ -14,6 +14,13 @@ export interface GameState {
   providedIn: 'root',
 })
 export class GameStateService {
+  readonly hasLoadedFromDb = computed(
+    () =>
+      this.goldUpgradeService.hasLoadedFromDb() &&
+      this.prestigeUpgradeService.hasLoadedFromDb() &&
+      this.characterService.hasLoadedFromDb(),
+  );
+
   constructor(
     public goldUpgradeService: GoldUpgradeService,
     public prestigeUpgradeService: PrestigeUpgradeService,
@@ -28,9 +35,11 @@ export class GameStateService {
     };
   }
 
-  pushUpdatesToDatabase() {
-    this.goldUpgradeService.updateDatabase();
-    this.prestigeUpgradeService.updateDatabase();
-    this.characterService.updateDatabase();
+  pushUpdatesToDatabase(): Promise<void[]> {
+    return Promise.all([
+      this.goldUpgradeService.updateDatabase(),
+      this.prestigeUpgradeService.updateDatabase(),
+      this.characterService.updateDatabase(),
+    ]);
   }
 }

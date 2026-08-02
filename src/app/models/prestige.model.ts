@@ -26,6 +26,26 @@ export enum UpgradeEffectType {
 
 export enum UpgradeScalingType {
   LINEAR = 'linear',
+  DIMINISHING_RETURNS = 'diminishing_returns',
   EXPONENTIAL = 'exponential',
   FIXED_PER_LEVEL = 'fixed_per_level',
+}
+
+export function calculateUpgradeEffect(
+  effectValue: number,
+  effectScaling: UpgradeScalingType,
+  currentLevel: number,
+): number {
+  switch (effectScaling) {
+    case UpgradeScalingType.LINEAR:
+      return effectValue * currentLevel;
+    case UpgradeScalingType.DIMINISHING_RETURNS:
+      return 1 - Math.pow(1 - effectValue, currentLevel);
+    case UpgradeScalingType.EXPONENTIAL:
+      return Math.pow(effectValue, currentLevel);
+    case UpgradeScalingType.FIXED_PER_LEVEL:
+      return effectValue * (currentLevel > 0 ? 1 : 0);
+    default:
+      return 0;
+  }
 }

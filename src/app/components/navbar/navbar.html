@@ -22,8 +22,32 @@
     </ul>
     <div class="nav-underline glow-cyan" #underline></div>
   </div>
-  <div class="glow-cyan">
-    <p class="glow-cyan">ENERGY_STREAM: 85,420</p>
-    <p class="glow-cyan">LVL_45_OPERATIVE</p>
+  <div class="flex items-center gap-6 glow-cyan">
+    <div class="text-right text-xs tracking-wider">
+      <p class="opacity-50">NEXT AUTO-SAVE</p>
+      <p aria-label="Time until next auto-save">{{ autoSaveService.timeUntilNextAutoSave() }}</p>
+      <p class="text-[0.65rem] opacity-40" aria-live="polite">
+        {{
+          autoSaveService.saveStatus() === 'error'
+            ? 'SYNC ERROR'
+            : autoSaveService.saveStatus() === 'saved'
+              ? 'STATE SYNCED'
+              : 'SERVER SYNC'
+        }}
+      </p>
+    </div>
+    <button
+      type="button"
+      class="save-button"
+      [disabled]="!autoSaveService.isReady() || autoSaveService.isSaving()"
+      (click)="saveNow()"
+      [attr.aria-label]="autoSaveService.isSaving() ? 'Saving game state' : 'Save game state now'"
+    >
+      {{ autoSaveService.isSaving() ? 'SAVING...' : 'SAVE NOW' }}
+    </button>
+    <div class="text-right">
+      <p class="glow-cyan">ENERGY_STREAM: 85,420</p>
+      <p class="glow-cyan">LVL_45_OPERATIVE</p>
+    </div>
   </div>
 </header>

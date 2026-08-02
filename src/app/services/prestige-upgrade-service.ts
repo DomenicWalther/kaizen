@@ -34,14 +34,16 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
     () => ({}),
   );
 
-  public override updateDatabase(): void {
-    const upgradesToSave: { id: string; currentLevel: number }[] = this.upgrades().map(
-      (upgrade) => ({
-        id: upgrade.id,
-        currentLevel: upgrade.currentLevel,
-      }),
-    );
-    this.databaseUpdateMutation.mutate({ upgrades: upgradesToSave });
+  public override updateDatabase(): Promise<void> {
+    const upgradesToSave = this.getUpgradeSaveData();
+    return this.saveUpgradeData(upgradesToSave);
+  }
+
+  private async saveUpgradeData(upgrades: { id: string; currentLevel: number }[]): Promise<void> {
+    await this.databaseUpdateMutation.mutate({ upgrades });
+
+    const error = this.databaseUpdateMutation.error();
+    if (error) throw error;
   }
 
   protected override getCurrentCurrency(): number {
@@ -90,12 +92,12 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
       {
         id: 'enemy_health_reduction',
         name: 'Fragile Foes',
-        description: 'Reduce enemy health by 5% per Level',
+        description: 'Reduce remaining enemy health by 5% per Level',
         baseCost: 1,
         costScaling: 1.6,
         effectType: UpgradeEffectType.ENEMY_HEALTH_REDUCTION,
         effectValue: 0.05,
-        effectScaling: UpgradeScalingType.LINEAR,
+        effectScaling: UpgradeScalingType.DIMINISHING_RETURNS,
         currentLevel: 0,
       },
       {

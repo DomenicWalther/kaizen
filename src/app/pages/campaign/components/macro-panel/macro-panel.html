@@ -1,0 +1,148 @@
+<aside class="h-full min-h-0 border-l-2 border-grid-line px-6 py-8 text-main-cyan font-mono flex flex-col">
+  <div class="flex items-center justify-between border-b border-grid-line pb-5">
+    <div class="flex items-center gap-3">
+      <div class="h-2 w-2 bg-main-cyan shadow-[0_0_8px_rgba(0,240,255,0.6)]"></div>
+      <div>
+        <p class="text-lg glow-cyan">MACRO BUILDER</p>
+        <p class="text-[10px] text-main-cyan-muted tracking-widest">TOP → BOTTOM</p>
+      </div>
+    </div>
+    <span class="text-[10px] text-main-cyan-muted">{{ macroService.blocks().length }} BLOCKS</span>
+  </div>
+
+  <div class="py-5 border-b border-grid-line">
+    <p class="text-xs text-main-cyan-muted tracking-widest mb-3">ADD BUILDING BLOCK</p>
+    <div class="grid grid-cols-[1fr_auto] gap-2 mb-2">
+      <label class="sr-only" for="stage-target">Reach stage</label>
+      <input
+        id="stage-target"
+        type="number"
+        min="1"
+        step="1"
+        [value]="stageTarget()"
+        (input)="updateStageTarget($event)"
+        class="min-w-0 bg-dark-bg border border-main-cyan/50 px-3 py-2 text-main-cyan outline-none focus:border-main-cyan"
+        [disabled]="macroService.isRunning()"
+      />
+      <button
+        type="button"
+        class="border border-main-cyan/50 px-3 py-2 text-xs hover:bg-main-cyan/20 disabled:opacity-40"
+        (click)="addReachStage()"
+        [disabled]="macroService.isRunning()"
+      >
+        + STAGE
+      </button>
+    </div>
+    <button
+      type="button"
+      class="w-full border border-main-Amber/60 text-main-Amber px-3 py-2 text-xs hover:bg-main-Amber/10 disabled:opacity-40"
+      (click)="macroService.addAscend()"
+      [disabled]="macroService.isRunning()"
+    >
+      + ASCEND
+    </button>
+    <div class="mt-4 flex items-center justify-between gap-3">
+      <span class="text-xs text-main-cyan-muted">INFINITE LOOP</span>
+      <button
+        type="button"
+        class="border px-3 py-2 text-xs hover:bg-main-cyan/20 disabled:opacity-40"
+        [class.border-main-cyan]="macroService.isLooping()"
+        [class.border-grid-line]="!macroService.isLooping()"
+        [class.text-main-cyan-muted]="!macroService.isLooping()"
+        (click)="toggleLooping()"
+        [disabled]="macroService.isRunning()"
+      >
+        LOOP: {{ macroService.isLooping() ? 'ON' : 'OFF' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-1 min-h-0 overflow-y-auto py-5">
+    <p class="text-xs text-main-cyan-muted tracking-widest mb-3">EXECUTION ORDER</p>
+    @if (macroService.blocks().length > 0) {
+      <ol class="flex flex-col gap-2">
+        @for (block of macroService.blocks(); track block.id; let index = $index) {
+          <li
+            class="border border-grid-line bg-main-cyan/5 p-3 flex items-center gap-3"
+            [class.border-main-cyan]="macroService.activeBlockIndex() === index"
+          >
+            <span class="text-xs text-main-cyan-muted">{{ index + 1 }}</span>
+            <div class="flex-1 min-w-0">
+              @if (block.type === 'reach-stage') {
+                <p class="truncate">REACH STAGE {{ block.targetStage }}</p>
+              } @else {
+                <p class="text-main-Amber">ASCEND</p>
+              }
+              @if (macroService.activeBlockIndex() === index) {
+                <p class="text-[10px] text-main-cyan-muted mt-1">ACTIVE</p>
+              }
+            </div>
+            <div class="flex flex-col gap-1">
+              <button
+                type="button"
+                class="text-xs text-main-cyan-muted hover:text-main-cyan disabled:opacity-30"
+                (click)="macroService.moveBlock(index, -1)"
+                [disabled]="macroService.isRunning() || index === 0"
+                [attr.aria-label]="'Move block ' + (index + 1) + ' up'"
+              >
+                ▲
+              </button>
+              <button
+                type="button"
+                class="text-xs text-main-cyan-muted hover:text-main-cyan disabled:opacity-30"
+                (click)="macroService.moveBlock(index, 1)"
+                [disabled]="macroService.isRunning() || index === macroService.blocks().length - 1"
+                [attr.aria-label]="'Move block ' + (index + 1) + ' down'"
+              >
+                ▼
+              </button>
+            </div>
+            <button
+              type="button"
+              class="text-xs text-red-400 hover:text-red-300 disabled:opacity-30"
+              (click)="macroService.removeBlock(index)"
+              [disabled]="macroService.isRunning()"
+              [attr.aria-label]="'Remove block ' + (index + 1)"
+            >
+              ×
+            </button>
+          </li>
+        }
+      </ol>
+    } @else {
+      <p class="text-sm text-main-cyan-muted leading-6">
+        Add a Reach Stage condition, then an Ascend action to build your first macro.
+      </p>
+    }
+  </div>
+
+  <div class="border-t border-grid-line pt-5">
+    <div class="flex justify-between text-xs mb-2">
+      <span class="text-main-cyan-muted">CURRENT STAGE</span>
+      <span>STAGE {{ characterService.character().currentStage }}</span>
+    </div>
+    <p class="text-xs text-main-cyan-muted min-h-8 mb-3">{{ macroService.statusMessage() }}</p>
+    <div class="grid grid-cols-[1fr_auto] gap-2">
+      <button
+        type="button"
+        class="border border-main-cyan px-3 py-3 text-sm hover:bg-main-cyan/20 disabled:opacity-40"
+        (click)="toggleRun()"
+        [disabled]="!macroService.isRunning() && macroService.blocks().length === 0"
+      >
+        @if (macroService.isRunning()) {
+          STOP MACRO
+        } @else {
+          RUN MACRO
+        }
+      </button>
+      <button
+        type="button"
+        class="border border-red-400/60 text-red-400 px-3 py-3 text-sm hover:bg-red-400/10 disabled:opacity-40"
+        (click)="macroService.clear()"
+        [disabled]="macroService.isRunning() || macroService.blocks().length === 0"
+      >
+        CLEAR
+      </button>
+    </div>
+  </div>
+</aside>

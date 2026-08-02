@@ -30,9 +30,9 @@ export class CombatService {
     const healthReduction = this.clamp(
       this.prestigeUpgradeService.getTotalEffect(UpgradeEffectType.ENEMY_HEALTH_REDUCTION),
       0,
-      0.95,
+      1,
     );
-    maxHP = Math.floor(maxHP * (1 - healthReduction));
+    maxHP = Math.max(1, Math.floor(maxHP * (1 - healthReduction)));
     return maxHP;
   });
 

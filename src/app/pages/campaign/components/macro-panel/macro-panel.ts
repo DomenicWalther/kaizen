@@ -11,6 +11,7 @@ export class MacroPanel {
   readonly macroService = inject(MacroService);
   readonly characterService = inject(CharacterService);
   readonly stageTarget = signal(20);
+  readonly stageStallSeconds = signal(10);
 
   updateStageTarget(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -20,6 +21,16 @@ export class MacroPanel {
 
   addReachStage(): void {
     this.macroService.addReachStage(this.stageTarget());
+  }
+
+  updateStageStallSeconds(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const seconds = Number(input.value);
+    this.stageStallSeconds.set(Number.isFinite(seconds) ? seconds : 1);
+  }
+
+  addStageStall(): void {
+    this.macroService.addStageStall(this.stageStallSeconds());
   }
 
   toggleLooping(): void {

@@ -56,17 +56,19 @@ describe('CombatService', () => {
   let service: CombatService;
   let characterService: MockCharacterService;
   let prestigeUpgradeService: MockPrestigeUpgradeService;
+  let goldUpgradeService: MockGoldUpgradeService;
 
   beforeEach(() => {
     characterService = new MockCharacterService();
     prestigeUpgradeService = new MockPrestigeUpgradeService();
+    goldUpgradeService = new MockGoldUpgradeService();
 
     TestBed.configureTestingModule({
       providers: [
         CombatService,
         { provide: CharacterService, useValue: characterService },
         { provide: PrestigeUpgradeService, useValue: prestigeUpgradeService },
-        { provide: GoldUpgradeService, useValue: new MockGoldUpgradeService() },
+        { provide: GoldUpgradeService, useValue: goldUpgradeService },
       ],
     });
 
@@ -81,6 +83,27 @@ describe('CombatService', () => {
     prestigeUpgradeService.effects.set(UpgradeEffectType.ATTACK_SPEED, 10);
 
     expect(service.calculateAttackSpeed()).toBe(100);
+  });
+
+  it('applies the Strength multiplier upgrade to damage', () => {
+    characterService.character.update((character) => ({ ...character, baseStrength: 10 }));
+    prestigeUpgradeService.effects.set(UpgradeEffectType.STRENGTH_MULTIPLIER, 0.1);
+
+    expect(service.calculateDamage()).toBe(11);
+  });
+
+  it('applies the Veteran Training damage multiplier to damage', () => {
+    characterService.character.update((character) => ({ ...character, baseStrength: 10 }));
+    goldUpgradeService.effects.set(UpgradeEffectType.TOTAL_DAMAGE_MULTIPLIER, 0.25);
+
+    expect(service.calculateDamage()).toBe(12);
+  });
+
+  it('applies the Spoils of War multiplier to gold rewards', () => {
+    spyOn(Math, 'random').and.returnValue(1);
+    goldUpgradeService.effects.set(UpgradeEffectType.GOLD_MULTIPLIER, 0.1);
+
+    expect(service.calculateGoldReward()).toBe(11);
   });
 
   it('keeps enemy health positive when an invalid reduction reaches 100%', () => {

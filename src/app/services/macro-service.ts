@@ -15,6 +15,11 @@ export class MacroService implements OnDestroy {
   private nextBlockId = 0;
   private intervalId: number | undefined;
   private macroStartedCombat = false;
+  private stageStallState: {
+    blockId: string;
+    lastObservedStage: number;
+    lastProgressAt: number;
+  } | null = null;
 
   readonly blocks = signal<MacroBlock[]>(this.loadBlocks());
   readonly isLooping = signal(false);
@@ -42,6 +47,21 @@ export class MacroService implements OnDestroy {
         id: this.createBlockId(),
         type: 'reach-stage',
         targetStage,
+      },
+    ]);
+    this.markEdited();
+    return true;
+  }
+
+  addStageStall(seconds: number): boolean {
+    if (this.isRunning() || !this.isValidStageStall(seconds)) return false;
+
+    this.blocks.update((blocks) => [
+      ...blocks,
+      {
+        id: this.createBlockId(),
+        type: 'stage-stall',
+        seconds,
       },
     ]);
     this.markEdited();
@@ -113,6 +133,7 @@ export class MacroService implements OnDestroy {
     }
 
     this.activeBlockIndex.set(0);
+    this.stageStallState = null;
     this.isRunning.set(true);
     this.status.set('running');
     this.macroStartedCombat = !this.combatService.isFighting();
@@ -167,6 +188,37 @@ export class MacroService implements OnDestroy {
         continue;
       }
 
+      if (block.type === 'stage-stall') {
+        const currentStage = this.characterService.character().currentStage;
+        const now = Date.now();
+
+        if (this.stageStallState?.blockId !== block.id) {
+          this.stageStallState = {
+            blockId: block.id,
+            lastObservedStage: currentStage,
+            lastProgressAt: now,
+          };
+          this.statusMessage.set(`Waiting for no new Stage for ${block.seconds}s.`);
+          return;
+        }
+
+        if (currentStage > this.stageStallState.lastObservedStage) {
+          this.stageStallState.lastObservedStage = currentStage;
+          this.stageStallState.lastProgressAt = now;
+          this.statusMessage.set(`Stage ${currentStage} reached. Restarting stall timer.`);
+          return;
+        }
+
+        if (now - this.stageStallState.lastProgressAt < block.seconds * 1000) {
+          this.statusMessage.set(`Waiting for no new Stage for ${block.seconds}s.`);
+          return;
+        }
+
+        this.stageStallState = null;
+        this.activeBlockIndex.set(index + 1);
+        continue;
+      }
+
       if (this.prestigeService.calculatePrestigeCores() <= 0) {
         this.stopRuntime('blocked', 'Ascension is not available yet.');
         return;
@@ -182,6 +234,7 @@ export class MacroService implements OnDestroy {
     this.clearInterval();
     this.isRunning.set(false);
     this.activeBlockIndex.set(null);
+    this.stageStallState = null;
     this.status.set(status);
     this.statusMessage.set(message);
 
@@ -215,6 +268,10 @@ export class MacroService implements OnDestroy {
     return Number.isInteger(targetStage) && targetStage >= 1;
   }
 
+  private isValidStageStall(seconds: number): boolean {
+    return Number.isFinite(seconds) && seconds > 0;
+  }
+
   private persistBlocks(): void {
     if (typeof localStorage === 'undefined') return;
 
@@ -242,6 +299,15 @@ export class MacroService implements OnDestroy {
     const block = value as Record<string, unknown>;
     if (typeof block['id'] !== 'string') return false;
     if (block['type'] === 'ascend') return true;
+
+    if (
+      block['type'] === 'stage-stall' &&
+      typeof block['seconds'] === 'number' &&
+      Number.isFinite(block['seconds']) &&
+      block['seconds'] > 0
+    ) {
+      return true;
+    }
 
     return (
       block['type'] === 'reach-stage' &&

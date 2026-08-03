@@ -89,6 +89,27 @@ export abstract class BaseUpgradeService<
     return this.upgrades().find((upgrade) => upgrade.id === upgradeID);
   }
 
+  setUpgradeLevel(upgradeID: string, level: number): boolean {
+    if (!Number.isFinite(level)) return false;
+
+    const upgrade = this.getUpgradeByID(upgradeID);
+    if (!upgrade) return false;
+
+    const normalizedLevel = Math.max(0, Math.floor(level));
+    this.upgrades.update((upgrades) =>
+      upgrades.map((currentUpgrade) =>
+        currentUpgrade.id === upgradeID
+          ? { ...currentUpgrade, currentLevel: normalizedLevel }
+          : currentUpgrade,
+      ),
+    );
+    return true;
+  }
+
+  resetUpgrades(): void {
+    this.upgrades.set(this.defaultUpgrades.map((upgrade) => ({ ...upgrade })));
+  }
+
   getTotalEffect(effectType: UpgradeEffectType): number {
     return this.upgrades()
       .filter((u: T) => u.effectType === effectType)

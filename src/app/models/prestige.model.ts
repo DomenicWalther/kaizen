@@ -15,6 +15,7 @@ export interface Upgrade {
 
 export enum UpgradeEffectType {
   FLAT_STAT_BOOST = 'flat_stat_boost',
+  STRENGTH_MULTIPLIER = 'strength_multiplier',
   MULTIPLIER_BOOST = 'multiplier_boost',
   ATTACK_SPEED = 'attack_speed',
   ENEMY_HEALTH_REDUCTION = 'enemy_health_reduction',
@@ -22,6 +23,8 @@ export enum UpgradeEffectType {
   DYNAMIC_PER_CORE = 'dynamic_per_core',
   CRITICAL_CHANCE_BOOST = 'critical_chance_boost',
   CRITICAL_DAMAGE_BOOST = 'critical_damage_boost',
+  TOTAL_DAMAGE_MULTIPLIER = 'total_damage_multiplier',
+  GOLD_MULTIPLIER = 'gold_multiplier',
 }
 
 export enum UpgradeScalingType {

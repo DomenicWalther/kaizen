@@ -12,26 +12,52 @@
 
   <div class="py-5 border-b border-grid-line">
     <p class="text-xs text-main-cyan-muted tracking-widest mb-3">ADD BUILDING BLOCK</p>
-    <div class="grid grid-cols-[1fr_auto] gap-2 mb-2">
-      <label class="sr-only" for="stage-target">Reach stage</label>
-      <input
-        id="stage-target"
-        type="number"
-        min="1"
-        step="1"
-        [value]="stageTarget()"
-        (input)="updateStageTarget($event)"
-        class="min-w-0 bg-dark-bg border border-main-cyan/50 px-3 py-2 text-main-cyan outline-none focus:border-main-cyan"
-        [disabled]="macroService.isRunning()"
-      />
-      <button
-        type="button"
-        class="border border-main-cyan/50 px-3 py-2 text-xs hover:bg-main-cyan/20 disabled:opacity-40"
-        (click)="addReachStage()"
-        [disabled]="macroService.isRunning()"
-      >
-        + STAGE
-      </button>
+    <div class="space-y-2 mb-2">
+      <div class="grid grid-cols-[1fr_auto] gap-2">
+        <label class="sr-only" for="stage-target">Reach stage</label>
+        <input
+          id="stage-target"
+          type="number"
+          min="1"
+          step="1"
+          [value]="stageTarget()"
+          (input)="updateStageTarget($event)"
+          class="min-w-0 bg-dark-bg border border-main-cyan/50 px-3 py-2 text-main-cyan outline-none focus:border-main-cyan"
+          [disabled]="macroService.isRunning()"
+        />
+        <button
+          type="button"
+          class="border border-main-cyan/50 px-3 py-2 text-xs hover:bg-main-cyan/20 disabled:opacity-40"
+          (click)="addReachStage()"
+          [disabled]="macroService.isRunning()"
+        >
+          + STAGE
+        </button>
+      </div>
+      <div class="grid grid-cols-[1fr_auto] gap-2">
+        <p class="col-span-2 text-[10px] text-main-cyan-muted tracking-widest">
+          STAGE HASN'T PROGRESSED IN (SECONDS)
+        </p>
+        <label class="sr-only" for="stage-stall-seconds">Seconds without stage progress</label>
+        <input
+          id="stage-stall-seconds"
+          type="number"
+          min="0.1"
+          step="0.1"
+          [value]="stageStallSeconds()"
+          (input)="updateStageStallSeconds($event)"
+          class="min-w-0 bg-dark-bg border border-main-cyan/50 px-3 py-2 text-main-cyan outline-none focus:border-main-cyan"
+          [disabled]="macroService.isRunning()"
+        />
+        <button
+          type="button"
+          class="border border-main-cyan/50 px-3 py-2 text-xs hover:bg-main-cyan/20 disabled:opacity-40"
+          (click)="addStageStall()"
+          [disabled]="macroService.isRunning()"
+        >
+          + STALL
+        </button>
+      </div>
     </div>
     <button
       type="button"
@@ -70,6 +96,8 @@
             <div class="flex-1 min-w-0">
               @if (block.type === 'reach-stage') {
                 <p class="truncate">REACH STAGE {{ block.targetStage }}</p>
+              } @else if (block.type === 'stage-stall') {
+                <p class="truncate">NO STAGE PROGRESS {{ block.seconds }}s</p>
               } @else {
                 <p class="text-main-Amber">ASCEND</p>
               }
@@ -111,7 +139,7 @@
       </ol>
     } @else {
       <p class="text-sm text-main-cyan-muted leading-6">
-        Add a Reach Stage condition, then an Ascend action to build your first macro.
+        Add a Reach Stage condition, a no-progress timeout, then an Ascend action to build your first macro.
       </p>
     }
   </div>

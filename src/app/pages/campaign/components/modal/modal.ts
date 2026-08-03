@@ -1,8 +1,9 @@
 import { Component, input, model, output } from '@angular/core';
+import { BigDecimalFormat } from '../../../../shared/pipes/BigDecimalFormatthing.pipe';
 
 @Component({
   selector: 'app-modal',
-  imports: [],
+  imports: [BigDecimalFormat],
   templateUrl: './modal.html',
   styleUrl: './styles.css',
 })

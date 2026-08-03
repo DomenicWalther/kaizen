@@ -43,6 +43,8 @@ export class UpgradeCard {
         return upgrade.id.startsWith('gold_')
           ? `+${formattedValue} STR`
           : `+${this.formatPercent(value)} DMG`;
+      case UpgradeEffectType.STRENGTH_MULTIPLIER:
+        return `+${formattedValue}x STR MULTIPLIER`;
       case UpgradeEffectType.CRITICAL_CHANCE_BOOST:
         return `+${this.formatPercent(value)} CRIT CHANCE`;
       case UpgradeEffectType.CRITICAL_DAMAGE_BOOST:

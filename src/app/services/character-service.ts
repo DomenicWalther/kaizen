@@ -93,6 +93,11 @@ export class CharacterService {
       lastActiveAt: new Date(),
     });
   }
+
+  resetProgress() {
+    this.character.set(this.returnDefaultCharacter());
+  }
+
   private returnDefaultCharacter(): Character {
     // Pure defaults for initial load
     return {

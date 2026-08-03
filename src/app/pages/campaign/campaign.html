@@ -1,18 +1,20 @@
-<div class="h-full grid grid-rows-[1fr_auto]">
+<div class="grid h-full min-h-0 grid-rows-[minmax(0,1fr)_10dvh] overflow-hidden">
   <app-modal
+    class="absolute"
     #ascensionModal
     [coreLabel]="prestigeService.calculatePrestigeCores()"
     (triggerCallback)="prestige()"
   ></app-modal>
-  <section class="grid grid-cols-[auto_1fr_25vw] text-white px-20">
+  <section class="grid min-h-0 grid-cols-[auto_1fr_25vw] overflow-hidden px-20 text-white">
     <app-sidebar
       [character]="character()"
       [attackDamage]="attackDamage()"
       [attackSpeed]="attackSpeed()"
-      class="h-full"
+      [strengthMultiplier]="strengthMultiplier()"
+      class="block h-full min-h-0"
     />
     <div
-      class="flex justify-between text-main-cyan font-mono border-r-2 glow-cyan border-r-grid-line px-20"
+      class="flex min-h-0 justify-between text-main-cyan font-mono border-r-2 glow-cyan border-r-grid-line px-20"
     >
       <div class="flex justify-around mt-20 w-full">
         <div>
@@ -54,7 +56,7 @@
     <app-macro-panel />
   </section>
   <footer
-    class="text-main-cyan font-mono h-[10vh] px-20 border-t border-t-grid-line flex items-center justify-between"
+    class="text-main-cyan font-mono h-full min-h-0 px-20 border-t border-t-grid-line flex items-center justify-between"
   >
     <div>
       <p class="text-main-cyan-muted text-sm mb-2">AUTOMATION</p>

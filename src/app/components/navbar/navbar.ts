@@ -3,10 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { AutoSaveService } from '../../services/autosave-service';
+import { DebugMenu } from '../debug-menu/debug-menu';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, DebugMenu],
   templateUrl: './navbar.html',
   styleUrl: './navbar-style.css',
 })

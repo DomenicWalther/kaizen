@@ -1,16 +1,16 @@
-<div class="border-r-grid-line border-r-2 pr-20 flex flex-col justify-between h-full">
-  <div class="mt-10 glow-cyan text-2xl font-mono text-main-cyan flex flex-col">
-    <div class="mb-10 flex gap-5 items-center">
+<div class="border-r-grid-line border-r-2 pr-20 flex min-h-0 flex-col justify-between h-full">
+  <div class="mt-6 glow-cyan text-xl font-mono text-main-cyan flex flex-col">
+    <div class="mb-4 flex gap-4 items-center">
       <div class="h-2 aspect-square bg-main-cyan shadow-[0_0_8px_rgba(0,240,255,0.6)]"></div>
-      <p class="glow-cyan text-2xl font-mono text-main-cyan">Hero Analytics</p>
+      <p class="glow-cyan text-xl font-mono text-main-cyan">Hero Analytics</p>
     </div>
-    <div class="flex flex-col gap-16">
+    <div class="flex flex-col gap-5">
       <app-label MAIN_LABEL="Attack Power" [SECONDARY_LABEL]="attackDamage() | BigDecimalFormat" />
       <app-label MAIN_LABEL="Attack Speed" SECONDARY_LABEL="{{ attackSpeed().toString() }}/s" />
       <app-label
         MAIN_LABEL="Multipliers"
         SECONDARY_LABEL="{{ character().prestigeLevel }} x {{
-          character().prestigeMultipliers.strength
+          strengthMultiplier()
         }}"
       />
       <div class="h-px w-full bg-grid-line"></div>
@@ -25,15 +25,15 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col text-2xl gap-20 text-main-cyan-muted font-mono mb-10">
+  <div class="flex flex-col text-xl gap-5 text-main-cyan-muted font-mono mb-6">
     <p>Vault</p>
     <div>
       <p>Gold</p>
-      <p class="text-main-cyan text-4xl">{{ character().gold | BigDecimalFormat }}</p>
+      <p class="text-main-cyan text-3xl">{{ character().gold | BigDecimalFormat }}</p>
     </div>
     <div>
       <p>Kaizen Cores</p>
-      <p class="text-main-cyan text-4xl">{{ character().prestigeCores | BigDecimalFormat }}</p>
+      <p class="text-main-cyan text-3xl">{{ character().prestigeCores | BigDecimalFormat }}</p>
     </div>
   </div>
 </div>

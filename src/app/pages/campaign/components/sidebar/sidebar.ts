@@ -13,4 +13,5 @@ export class Sidebar {
   character = input.required<Character>();
   attackDamage = input.required<number>();
   attackSpeed = input.required<number>();
+  strengthMultiplier = input.required<number>();
 }

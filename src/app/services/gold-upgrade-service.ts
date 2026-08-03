@@ -96,6 +96,28 @@ export class GoldUpgradeService extends BaseUpgradeService<Upgrade> {
         effectScaling: UpgradeScalingType.LINEAR,
         currentLevel: 0,
       },
+      {
+        id: 'gold_veteran_training',
+        name: 'Veteran Training',
+        description: 'Increase total damage by 25% per Level',
+        baseCost: 250,
+        costScaling: 1.8,
+        effectType: UpgradeEffectType.TOTAL_DAMAGE_MULTIPLIER,
+        effectValue: 0.25,
+        effectScaling: UpgradeScalingType.LINEAR,
+        currentLevel: 0,
+      },
+      {
+        id: 'gold_spoils_of_war',
+        name: 'Spoils of War',
+        description: 'Increase gold earned by 10% per Level',
+        baseCost: 500,
+        costScaling: 1.7,
+        effectType: UpgradeEffectType.GOLD_MULTIPLIER,
+        effectValue: 0.1,
+        effectScaling: UpgradeScalingType.LINEAR,
+        currentLevel: 0,
+      },
     ];
   }
 }

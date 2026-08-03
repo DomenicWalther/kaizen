@@ -44,6 +44,7 @@ describe('MacroService', () => {
   beforeEach(() => {
     localStorage.removeItem('kaizen-macro');
     jasmine.clock().install();
+    jasmine.clock().mockDate();
 
     characterService = { character: signal(createCharacter()) };
     combatService = {
@@ -110,6 +111,39 @@ describe('MacroService', () => {
     expect(service.status()).toBe('running');
   });
 
+  it('advances after the stage has not progressed for the configured number of seconds', () => {
+    service.addStageStall(10);
+    service.addAscend();
+
+    expect(service.start()).toBeTrue();
+    jasmine.clock().tick(9_900);
+
+    expect(prestigeService.prestige).not.toHaveBeenCalled();
+    expect(service.activeBlock()?.type).toBe('stage-stall');
+
+    jasmine.clock().tick(100);
+
+    expect(prestigeService.prestige).toHaveBeenCalledTimes(1);
+    expect(service.status()).toBe('completed');
+  });
+
+  it('restarts the stall timer when a new stage is reached', () => {
+    service.addStageStall(10);
+    service.addAscend();
+    service.start();
+
+    jasmine.clock().tick(5_000);
+    characterService.character.update((character) => ({ ...character, currentStage: 2 }));
+    jasmine.clock().tick(9_900);
+
+    expect(prestigeService.prestige).not.toHaveBeenCalled();
+
+    jasmine.clock().tick(200);
+
+    expect(prestigeService.prestige).toHaveBeenCalledTimes(1);
+    expect(service.status()).toBe('completed');
+  });
+
   it('restarts from the first block instead of completing when looping is enabled', () => {
     service.addReachStage(1);
     service.addAscend();
@@ -143,6 +177,13 @@ describe('MacroService', () => {
   it('rejects invalid reach-stage targets', () => {
     expect(service.addReachStage(0)).toBeFalse();
     expect(service.addReachStage(1.5)).toBeFalse();
+    expect(service.blocks()).toEqual([]);
+  });
+
+  it('rejects invalid stage stall durations', () => {
+    expect(service.addStageStall(0)).toBeFalse();
+    expect(service.addStageStall(-1)).toBeFalse();
+    expect(service.addStageStall(Infinity)).toBeFalse();
     expect(service.blocks()).toEqual([]);
   });
 });

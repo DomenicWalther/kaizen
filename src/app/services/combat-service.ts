@@ -152,7 +152,8 @@ export class CombatService {
       (character.baseStrength +
         this.goldUpgradeService.getTotalEffect(UpgradeEffectType.FLAT_STAT_BOOST)) *
       character.strengthModifier *
-      character.prestigeMultipliers.strength *
+      (character.prestigeMultipliers.strength +
+        this.prestigeUpgradeService.getTotalEffect(UpgradeEffectType.STRENGTH_MULTIPLIER)) *
       character.prestigeLevel;
 
     const strengthBoost = this.prestigeUpgradeService.getTotalEffect(
@@ -165,6 +166,11 @@ export class CombatService {
     );
     const unusedCores = character.prestigeCores;
     damage *= 1 + dpsPerCore * unusedCores;
+
+    const totalDamageMultiplier = this.goldUpgradeService.getTotalEffect(
+      UpgradeEffectType.TOTAL_DAMAGE_MULTIPLIER,
+    );
+    damage *= 1 + totalDamageMultiplier;
     return Math.floor(damage);
   }
 
@@ -190,6 +196,11 @@ export class CombatService {
     const waveBonusGold = 1 + this.characterService.character().currentWave * 0.05;
 
     let gold = baseGold * waveBonusGold;
+
+    const goldMultiplier = this.goldUpgradeService.getTotalEffect(
+      UpgradeEffectType.GOLD_MULTIPLIER,
+    );
+    gold *= 1 + goldMultiplier;
 
     // #TODO: Add Upgrade for Gold "Critical Chance" increase
     // seperate critical chance from the crit chance used in attacks -- might be upgraded differently later

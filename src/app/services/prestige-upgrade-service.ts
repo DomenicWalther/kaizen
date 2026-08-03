@@ -79,6 +79,17 @@ export class PrestigeUpgradeService extends BaseUpgradeService<Upgrade> {
         currentLevel: 0,
       },
       {
+        id: 'strength_prestige_multiplier',
+        name: 'Ascendant Strength',
+        description: 'Increase the Strength multiplier by 0.1 per Level',
+        baseCost: 1,
+        costScaling: 3,
+        effectType: UpgradeEffectType.STRENGTH_MULTIPLIER,
+        effectValue: 0.1,
+        effectScaling: UpgradeScalingType.LINEAR,
+        currentLevel: 0,
+      },
+      {
         id: 'core_gain_boost',
         name: 'Kaizen Mastery',
         description: 'Increase Kaizen-Core gain by 10% per Level',

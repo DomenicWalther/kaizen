@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
 import { NgStyle } from '@angular/common';
 import { Character } from '../../models/character.model';
@@ -19,6 +19,7 @@ import { UpgradeEffectType } from '../../models/prestige.model';
   host: {
     class: 'block h-full min-h-0',
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './campaign.html',
 })
 export class Campaign {

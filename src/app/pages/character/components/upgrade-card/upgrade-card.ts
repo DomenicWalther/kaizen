@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 import {
   calculateUpgradeEffect,
   Upgrade,
@@ -10,6 +10,7 @@ import { BigDecimalFormat } from '../../../../shared/pipes/BigDecimalFormatthing
   selector: 'app-upgrade-card',
   imports: [BigDecimalFormat],
   templateUrl: './upgrade-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: ``,
 })
 export class UpgradeCard {

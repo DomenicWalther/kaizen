@@ -18,13 +18,6 @@ export const routes: Routes = [
     canActivate: [convexAuthGuard],
   },
   {
-    path: 'milestones',
-    loadComponent: () => {
-      return import('./pages/milestones/milestones').then((m) => m.Milestones);
-    },
-    canActivate: [convexAuthGuard],
-  },
-  {
     path: 'campaign',
     loadComponent: () => {
       return import('./pages/campaign/campaign').then((m) => m.Campaign);

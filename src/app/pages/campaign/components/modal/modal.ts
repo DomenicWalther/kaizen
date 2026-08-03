@@ -1,10 +1,11 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { BigDecimalFormat } from '../../../../shared/pipes/BigDecimalFormatthing.pipe';
 
 @Component({
   selector: 'app-modal',
   imports: [BigDecimalFormat],
   templateUrl: './modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './styles.css',
 })
 export class Modal {

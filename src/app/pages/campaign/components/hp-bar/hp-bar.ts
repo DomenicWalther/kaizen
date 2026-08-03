@@ -1,9 +1,10 @@
-import { Component, computed, input, OnInit } from '@angular/core';
+import { Component, computed, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-hp-bar',
   imports: [],
   templateUrl: './hp-bar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: ``,
 })
 export class HPBar {

@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-label',
   imports: [],
   templateUrl: './label.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: ``,
 })
 export class Label {

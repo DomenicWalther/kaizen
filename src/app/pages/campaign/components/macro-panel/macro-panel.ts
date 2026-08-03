@@ -1,10 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CharacterService } from '../../../../services/character-service';
 import { MacroService } from '../../../../services/macro-service';
 
 @Component({
   selector: 'app-macro-panel',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './macro-panel.html',
 })
 export class MacroPanel {

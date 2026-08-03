@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
 import { PrestigeUpgradeService } from '../../services/prestige-upgrade-service';
 import { GoldUpgradeService } from '../../services/gold-upgrade-service';
@@ -8,6 +8,7 @@ import { BigDecimalFormat } from '../../shared/pipes/BigDecimalFormatthing.pipe'
 @Component({
   selector: 'app-character',
   imports: [UpgradeCard, BigDecimalFormat],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './character.html',
 })
 export class Character {

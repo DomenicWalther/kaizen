@@ -10,7 +10,7 @@
 
 ## Tech Stack
 
-- **Frontend:** Angular 21
+- **Frontend:** Angular 22
 - **Language:** TypeScript
 - **BaaS:** Convex (Real-time Database & functions)
 - **Auth:** Clerk

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { AutoSaveService } from '../../services/autosave-service';
 import { CharacterService } from '../../services/character-service';
 import { GoldUpgradeService } from '../../services/gold-upgrade-service';
@@ -7,6 +7,7 @@ import { Upgrade } from '../../models/prestige.model';
 
 @Component({
   selector: 'app-debug-menu',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './debug-menu.html',
 })
 export class DebugMenu {
@@ -53,7 +54,10 @@ export class DebugMenu {
     if (this.isSaving()) return;
 
     for (const upgrade of this.goldUpgradeService.allUpgrades()) {
-      this.goldUpgradeService.setUpgradeLevel(upgrade.id, this.normalizeLevel(this.levelDraft(upgrade)));
+      this.goldUpgradeService.setUpgradeLevel(
+        upgrade.id,
+        this.normalizeLevel(this.levelDraft(upgrade)),
+      );
     }
     for (const upgrade of this.prestigeUpgradeService.allUpgrades()) {
       this.prestigeUpgradeService.setUpgradeLevel(

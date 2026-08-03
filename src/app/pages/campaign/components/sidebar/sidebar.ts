@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { BigDecimalFormat } from '../../../../shared/pipes/BigDecimalFormatthing.pipe';
 
 import { Character } from '../../../../models/character.model';
@@ -7,6 +7,7 @@ import { Label } from './label/label';
   selector: 'app-sidebar',
   imports: [BigDecimalFormat, Label],
   templateUrl: './sidebar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: ``,
 })
 export class Sidebar {

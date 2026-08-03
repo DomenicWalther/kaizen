@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CharacterService } from '../../services/character-service';
 import { Character } from '../../models/character.model';
 
 @Component({
   selector: 'app-dashboard',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './dashboard.html',
 })
 export class Dashboard {
@@ -18,7 +19,7 @@ export class Dashboard {
       Character,
       'level' | 'baseStrength' | 'baseIntelligence' | 'baseEndurance' | 'gold'
     >,
-    amount: number
+    amount: number,
   ) {
     this.characterService.modifyStat(stat, amount);
   }

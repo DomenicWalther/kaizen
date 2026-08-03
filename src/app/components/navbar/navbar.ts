@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
@@ -9,6 +17,7 @@ import { DebugMenu } from '../debug-menu/debug-menu';
   selector: 'app-navbar',
   imports: [RouterLink, RouterLinkActive, DebugMenu],
   templateUrl: './navbar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navbar-style.css',
 })
 export class Navbar implements AfterViewInit {

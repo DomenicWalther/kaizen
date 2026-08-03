@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ClerkService } from '../../../services/clerk.service';
 import {
   CvaUnauthenticatedDirective,
@@ -11,6 +11,7 @@ import {
   selector: 'app-login',
   imports: [CvaUnauthenticatedDirective, CvaAuthenticatedDirective, CvaAuthLoadingDirective],
   templateUrl: './login.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: ``,
 })
 export class Login {
